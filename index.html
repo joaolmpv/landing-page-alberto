@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Fisioterapeuta especializado em dor crônica, reabilitação pós-operatória e fisioterapia esportiva. Pós-graduando pelo Hospital Albert Einstein. CREFITO 12: 443572-F.">
+  <title>Dr. João Alberto Navarro Nazaré | Fisioterapeuta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div id="preloader" aria-hidden="true">
+    <div class="preloader-logo-wrap">
+      <svg class="preloader-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" width="120" height="120">
+        <circle class="logo-stroke" cx="60" cy="60" r="52" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+        <path class="logo-stroke" d="M60 28 L60 92 M38 48 Q60 32 82 48 M38 72 Q60 88 82 72" stroke="#A1887F" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path class="logo-stroke" d="M48 60 L72 60" stroke="#BCAAA4" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header>
+    <nav id="navbar" class="navbar" aria-label="Navegação principal">
+      <a href="#hero" class="navbar-logo" aria-label="Início">
+        <svg class="nav-logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" width="40" height="40" aria-hidden="true">
+          <circle cx="60" cy="60" r="52" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+          <path d="M60 28 L60 92 M38 48 Q60 32 82 48 M38 72 Q60 88 82 72" stroke="#A1887F" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M48 60 L72 60" stroke="#BCAAA4" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        </svg>
+      </a>
+      <ul class="navbar-links">
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#especialidades">Especialidades</a></li>
+        <li><a href="#casos">Casos</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+      <a href="#contato" class="btn-nav-cta">Agendar Avaliação</a>
+      <button type="button" class="navbar-hamburger" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
+      <button type="button" class="drawer-close" id="menu-close" aria-label="Fechar menu">&times;</button>
+      <ul class="drawer-links">
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#especialidades">Especialidades</a></li>
+        <li><a href="#casos">Casos</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+      <a href="#contato" class="btn-nav-cta drawer-cta">Agendar Avaliação</a>
+    </div>
+    <div id="drawer-overlay" class="drawer-overlay" aria-hidden="true"></div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section id="hero" class="hero section-dark">
+      <div class="hero-decor hero-decor-lg"></div>
+      <div class="hero-decor hero-decor-sm"></div>
+      <div class="hero-inner container">
+        <div class="hero-content">
+          <p class="hero-label">Fisioterapeuta · CREFITO 12: 443572-F</p>
+          <h1 class="serif hero-title">A ciência moderna<br>da dor aliada ao<br>retorno seguro<br>do seu <em>movimento</em>.</h1>
+          <p class="hero-desc">Especialização em Dor pelo Hospital Albert Einstein e protocolos internacionais FIFA aplicados à reabilitação ortopédica, esportiva e ao manejo de condições complexas.</p>
+          <div class="hero-line"></div>
+          <div class="hero-buttons">
+            <a href="#contato" class="btn btn-primary">Agendar Avaliação</a>
+            <a href="#especialidades" class="btn btn-secondary">Ver Especialidades</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-photo-wrap">
+            <div class="img-placeholder hero-photo-placeholder" role="img" aria-label="Foto do Dr. João Alberto Navarro Nazaré">
+              <span class="placeholder-initials">JAN</span>
+            </div>
+            <!-- Substituir placeholder por: <img src="assets/images/hero-photo.webp" alt="Dr. João Alberto Navarro Nazaré, fisioterapeuta" width="480" height="600"> -->
+          </div>
+          <div class="hero-badge hero-badge-top">
+            <span class="badge-small">Einstein · Dor Crônica</span>
+            <span class="badge-main">Pós-graduando</span>
+          </div>
+          <div class="hero-badge hero-badge-bottom">
+            <span class="badge-small">FIFA · Football Medicine</span>
+            <span class="badge-main">Diploma Certified</span>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-indicator" aria-hidden="true">
+        <div class="scroll-indicator-dot"></div>
+      </div>
+    </section>
+
+    <!-- Credenciais -->
+    <section id="credenciais" class="credentials section-dark-mid">
+      <div class="container credentials-grid">
+        <div class="credential-item">
+          <span class="credential-value serif">UEPA</span>
+          <span class="credential-label">Graduação em Fisioterapia</span>
+        </div>
+        <div class="credential-item">
+          <span class="credential-value serif">Einstein</span>
+          <span class="credential-label">Pós-Grad. em Dor · Em curso</span>
+        </div>
+        <div class="credential-item">
+          <span class="credential-value serif">FIFA</span>
+          <span class="credential-label">Diploma in Football Medicine</span>
+        </div>
+        <div class="credential-item">
+          <span class="credential-value serif">CREFITO</span>
+          <span class="credential-label">12: 443572-F · Reg. Ativo</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sobre -->
+    <section id="sobre" class="about section-light">
+      <div class="container about-grid">
+        <div class="about-visual">
+          <div class="about-image-wrap" id="about-parallax-wrap">
+            <div class="img-placeholder about-img-placeholder" role="img" aria-label="Dr. João Alberto em atendimento fisioterapêutico">
+              <svg class="anatomy-icon" viewBox="0 0 80 120" aria-hidden="true">
+                <ellipse cx="40" cy="18" rx="14" ry="16" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+                <path d="M40 34 L40 70 M25 45 L55 45 M30 70 L20 95 M50 70 L60 95" stroke="#A1887F" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <!-- Substituir por: <img src="assets/images/atendimento-1.webp" alt="Atendimento fisioterapêutico" loading="lazy" class="about-img"> -->
+          </div>
+          <div class="authority-badge shimmer-badge">
+            <div class="badge-logo-placeholder" aria-hidden="true">
+              <span class="serif gold-text">E</span>
+            </div>
+            <div>
+              <span class="badge-gold-label">Hospital Israelita Albert Einstein</span>
+              <span class="badge-white-text">Pós-graduando em Dor</span>
+            </div>
+          </div>
+          <div class="authority-badge-small">
+            <span class="badge-small">UEPA</span>
+            <span class="badge-main dark-text">Graduação em Fisioterapia</span>
+          </div>
+        </div>
+        <div class="about-content">
+          <p class="section-label">Sobre o Profissional</p>
+          <h2 class="serif about-title">João Alberto<br>Navarro Nazaré.</h2>
+          <div class="section-line"></div>
+          <p>Fisioterapeuta graduado pela Universidade do Estado do Pará (UEPA), pós-graduando em Dor pelo Hospital Israelita Albert Einstein — referência mundial em saúde. Sua prática combina a ciência moderna da dor com protocolos internacionais de reabilitação esportiva, certificados pela FIFA.</p>
+          <p>Especializado em reabilitação pós-operatória de artroplastias, lesões ligamentares e fraturas, atua com uma filosofia clara: menos dependência medicamentosa, mais funcionalidade e movimento consciente.</p>
+          <div class="timeline" id="timeline">
+            <div class="timeline-line" id="timeline-line"></div>
+            <div class="timeline-point" data-point="1">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text">
+                <h3 class="serif">UEPA</h3>
+                <p>Graduação em Fisioterapia</p>
+              </div>
+            </div>
+            <div class="timeline-point" data-point="2">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text">
+                <h3 class="serif">Sete de Setembro</h3>
+                <p>Fisioterapia Ortopédica Avançada</p>
+              </div>
+            </div>
+            <div class="timeline-point timeline-point-gold" data-point="3">
+              <div class="timeline-dot timeline-dot-gold"></div>
+              <div class="timeline-text">
+                <h3 class="serif shimmer-text">Einstein</h3>
+                <p class="shimmer-text">Pós-graduação em Dor · Em curso</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Especialidades -->
+    <section id="especialidades" class="expertise section-dark">
+      <div class="container">
+        <header class="section-header-center">
+          <p class="section-label">Expertise Clínica</p>
+          <h2 class="serif section-title-light">Onde a ciência<br>encontra o <em>movimento</em>.</h2>
+        </header>
+        <div class="cards-grid" id="cards-grid">
+          <article class="expertise-card">
+            <svg class="card-icon" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+              <path d="M4 14 Q8 6 14 14 T24 14" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+              <path d="M4 18 Q8 26 14 18 T24 18" stroke="#A1887F" stroke-width="1.5" fill="none" opacity="0.6"/>
+            </svg>
+            <h3 class="serif card-title">Manejo da Dor Crônica</h3>
+            <p>Baseado na ciência moderna da dor com formação pelo Einstein. Protocolo multimodal para fibromialgia, lombalgia crônica, dor neuropática e condições de difícil resolução.</p>
+            <div class="card-tags">
+              <span class="tag">Fibromialgia</span>
+              <span class="tag">Lombalgia</span>
+              <span class="tag">Dor Neuropática</span>
+            </div>
+          </article>
+          <article class="expertise-card expertise-card-featured">
+            <svg class="card-icon" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+              <circle cx="10" cy="14" r="5" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+              <circle cx="18" cy="14" r="5" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+              <path d="M15 14 L13 14" stroke="#A1887F" stroke-width="1.5"/>
+            </svg>
+            <h3 class="serif card-title">Pós-Operatório e Traumato-Ortopédica</h3>
+            <p>Especializado em artroplastias de quadril e joelho, reconstruções ligamentares e recuperação funcional de fraturas. Retorno seguro às atividades com protocolo progressivo individualizado.</p>
+            <div class="card-tags">
+              <span class="tag">Artroplastia</span>
+              <span class="tag">LCA</span>
+              <span class="tag">Fraturas</span>
+            </div>
+          </article>
+          <article class="expertise-card">
+            <svg class="card-icon" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+              <circle cx="14" cy="8" r="4" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+              <path d="M8 26 Q14 16 20 26" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+              <path d="M10 18 L18 18" stroke="#A1887F" stroke-width="1.5"/>
+            </svg>
+            <h3 class="serif card-title">Performance e Fisioterapia Esportiva</h3>
+            <p>Portador do FIFA Diploma in Football Medicine. Protocolos internacionais aplicados a atletas amadores e profissionais: prevenção de lesões, otimização de performance e retorno ao esporte.</p>
+            <div class="card-tags">
+              <span class="tag">FIFA Certified</span>
+              <span class="tag">Atletas</span>
+              <span class="tag">Performance</span>
+            </div>
+          </article>
+          <article class="expertise-card">
+            <svg class="card-icon" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+              <rect x="6" y="4" width="16" height="20" rx="2" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+              <path d="M10 12 L13 15 L18 10" stroke="#A1887F" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+            <h3 class="serif card-title">Avaliação Funcional Completa</h3>
+            <p>Anamnese detalhada, avaliação biomecânica e elaboração de plano terapêutico individual. Cada paciente recebe um protocolo único baseado em sua história, objetivo e condição clínica.</p>
+            <div class="card-tags">
+              <span class="tag">Biomecânica</span>
+              <span class="tag">Personalizado</span>
+              <span class="tag">Evidências</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Casos -->
+    <section id="casos" class="cases section-light">
+      <div class="container">
+        <header class="section-header-center cases-header">
+          <p class="section-label">Portfólio Clínico</p>
+          <h2 class="serif section-title-dark">Evolução real.<br>Resultados documentados.</h2>
+          <p class="cases-subtitle">Casos representativos da prática clínica. Identidades preservadas.</p>
+        </header>
+
+        <div class="clinical-case" data-case="1">
+          <button type="button" class="case-accordion-toggle" aria-expanded="false">
+            <span class="serif">Caso 1 — Dor Crônica</span>
+            <span class="accordion-icon" aria-hidden="true"></span>
+          </button>
+          <div class="case-flow">
+            <div class="case-block">
+              <div class="progress-line case-progress"></div>
+              <span class="block-label">Diagnóstico</span>
+              <h3 class="serif block-title">Lombalgia Crônica Inespecífica com componente neuropático central</h3>
+              <p class="block-text">Profissional de 45 anos, lombalgia crônica há 3 anos, sem resultado em dois tratamentos anteriores.</p>
+            </div>
+            <div class="case-block">
+              <div class="progress-line case-progress"></div>
+              <span class="block-label">Abordagem</span>
+              <p class="block-text">Protocolo multimodal baseado no modelo biopsicossocial da dor, com terapia manual, exercício progressivo e educação em dor (Pain Neuroscience Education).</p>
+            </div>
+            <div class="case-block case-block-outcome">
+              <div class="progress-line case-progress"></div>
+              <span class="block-label">Resultado</span>
+              <p class="outcome-text serif">Redução de 80% na escala de dor (EVA). Alta com autonomia e retorno à vida profissional completa em 14 semanas.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="clinical-case" data-case="2">
+          <button type="button" class="case-accordion-toggle" aria-expanded="false">
+            <span class="serif">Caso 2 — Pós-Operatório LCA</span>
+            <span class="accordion-icon" aria-hidden="true"></span>
+          </button>
+          <div class="case-flow">
+            <div class="case-block">
+              <div class="progress-line case-progress"></div>
+              <span class="block-label">Diagnóstico</span>
+              <h3 class="serif block-title">Pós-operatório de reconstrução do Ligamento Cruzado Anterior, semana 2</h3>
+              <p class="block-text">Atleta amador de 38 anos, reconstrução do LCA joelho direito.</p>
+            </div>
+            <div class="case-block">
+              <div class="progress-line case-progress"></div>
+              <span class="block-label">Abordagem</span>
+              <p class="block-text">Protocolo acelerado baseado em critérios funcionais, fortalecimento neuromuscular, controle do edema e reintegração esportiva progressiva.</p>
+            </div>
+            <div class="case-block case-block-outcome">
+              <div class="progress-line case-progress"></div>
+              <span class="block-label">Resultado</span>
+              <p class="outcome-text serif">Retorno ao futebol amador em 8 meses com 100% dos critérios de alta cumpridos. Zero recidiva em 12 meses de acompanhamento.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="clinical-case" data-case="3">
+          <button type="button" class="case-accordion-toggle" aria-expanded="false">
+            <span class="serif">Caso 3 — Artroplastia de Quadril</span>
+            <span class="accordion-icon" aria-hidden="true"></span>
+          </button>
+          <div class="case-flow">
+            <div class="case-block">
+              <div class="progress-line case-progress"></div>
+              <span class="block-label">Diagnóstico</span>
+              <h3 class="serif block-title">Pós-operatório de Artroplastia Total de Quadril, fase hospitalar</h3>
+              <p class="block-text">Paciente de 68 anos, prótese total de quadril.</p>
+            </div>
+            <div class="case-block">
+              <div class="progress-line case-progress"></div>
+              <span class="block-label">Abordagem</span>
+              <p class="block-text">Reabilitação precoce iniciada em 24h, prevenção de complicações tromboembólicas e fraqueza muscular, progressão funcional segura com protocolos de precaução específicos.</p>
+            </div>
+            <div class="case-block case-block-outcome">
+              <div class="progress-line case-progress"></div>
+              <span class="block-label">Resultado</span>
+              <p class="outcome-text serif">Deambulação independente em 5 dias. Alta hospitalar no prazo. Retorno completo às atividades de vida diária em 6 semanas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section id="depoimentos" class="testimonials section-dark-mid">
+      <div class="container">
+        <header class="section-header-center">
+          <p class="section-label">Quem confia no trabalho</p>
+          <h2 class="serif section-title-light testimonials-title">Resultados que falam por si.</h2>
+        </header>
+        <div class="carousel-wrap">
+          <button type="button" class="carousel-btn carousel-prev" aria-label="Depoimento anterior">&larr;</button>
+          <div class="carousel-viewport">
+            <div class="carousel-track" id="carousel-track">
+              <div class="carousel-slide">
+                <blockquote class="testimonial-card">
+                  <span class="quote-mark serif" aria-hidden="true">&ldquo;</span>
+                  <p class="testimonial-text serif">Depois de anos convivendo com dor nas costas e sem resultado em outros tratamentos, o Dr. João Alberto foi o único que explicou de verdade o que estava acontecendo no meu corpo. Em 3 meses, voltei a trabalhar sem dor.</p>
+                  <div class="testimonial-line"></div>
+                  <footer class="testimonial-author">
+                    <div class="avatar">M</div>
+                    <div>
+                      <cite class="author-name">M.S.</cite>
+                      <span class="author-dx">Lombalgia Crônica</span>
+                    </div>
+                  </footer>
+                </blockquote>
+              </div>
+              <div class="carousel-slide">
+                <blockquote class="testimonial-card">
+                  <span class="quote-mark serif" aria-hidden="true">&ldquo;</span>
+                  <p class="testimonial-text serif">Voltei a jogar futebol 8 meses após a cirurgia do joelho. O protocolo era intenso, mas cada passo fazia sentido. Profissional de outro nível.</p>
+                  <div class="testimonial-line"></div>
+                  <footer class="testimonial-author">
+                    <div class="avatar">R</div>
+                    <div>
+                      <cite class="author-name">R.M.</cite>
+                      <span class="author-dx">Pós-op LCA</span>
+                    </div>
+                  </footer>
+                </blockquote>
+              </div>
+              <div class="carousel-slide">
+                <blockquote class="testimonial-card">
+                  <span class="quote-mark serif" aria-hidden="true">&ldquo;</span>
+                  <p class="testimonial-text serif">Com 68 anos, a cirurgia do quadril parecia o fim da minha independência. Em 6 semanas, estava caminhando sozinho pela casa. Gratidão enorme.</p>
+                  <div class="testimonial-line"></div>
+                  <footer class="testimonial-author">
+                    <div class="avatar">A</div>
+                    <div>
+                      <cite class="author-name">A.P.</cite>
+                      <span class="author-dx">Artroplastia de Quadril</span>
+                    </div>
+                  </footer>
+                </blockquote>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="carousel-btn carousel-next" aria-label="Próximo depoimento">&rarr;</button>
+        </div>
+        <div class="carousel-dots" id="carousel-dots" role="tablist" aria-label="Selecionar depoimento">
+          <button type="button" class="dot active" data-slide="0" aria-label="Depoimento 1" aria-selected="true"></button>
+          <button type="button" class="dot" data-slide="1" aria-label="Depoimento 2" aria-selected="false"></button>
+          <button type="button" class="dot" data-slide="2" aria-label="Depoimento 3" aria-selected="false"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA / Contato -->
+    <section id="contato" class="cta section-dark cta-section">
+      <div class="container cta-inner">
+        <p class="section-label">Pronto para recuperar seu movimento?</p>
+        <h2 class="serif cta-title">Agende sua<br>avaliação clínica.</h2>
+        <div class="section-line section-line-center"></div>
+        <p class="cta-desc">O primeiro passo para uma vida com menos dor começa com uma conversa. Contato direto e sem burocracia.</p>
+        <div class="cta-buttons">
+          <!-- TODO: Substituir 5511999999999 pelo número real do WhatsApp -->
+          <a href="https://wa.me/5511999999999" class="btn btn-primary btn-whatsapp" target="_blank" rel="noopener noreferrer">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Falar pelo WhatsApp
+          </a>
+          <a href="https://instagram.com/dr.albertonavarro" class="btn btn-secondary btn-instagram" target="_blank" rel="noopener noreferrer">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            @dr.albertonavarro
+          </a>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <span class="contact-label">CREFITO</span>
+            <span class="contact-value">12: 443572-F</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Especialidade</span>
+            <span class="contact-value">Fisioterapeuta</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Instagram</span>
+            <span class="contact-value">@dr.albertonavarro</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Linktree</span>
+            <a href="https://linktr.ee/albertofisio" class="contact-value link" target="_blank" rel="noopener noreferrer">linktr.ee/albertofisio</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <div class="footer-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" width="36" height="36" aria-hidden="true">
+          <circle cx="60" cy="60" r="52" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+          <path d="M60 28 L60 92 M38 48 Q60 32 82 48 M38 72 Q60 88 82 72" stroke="#A1887F" stroke-width="2" stroke-linecap="round" fill="none"/>
+        </svg>
+        <p>Dr. João Alberto Navarro Nazaré · Fisioterapeuta</p>
+      </div>
+      <nav class="footer-links" aria-label="Links rápidos">
+        <a href="#sobre">Sobre</a>
+        <a href="#especialidades">Especialidades</a>
+        <a href="#casos">Casos</a>
+        <a href="#contato">Contato</a>
+      </nav>
+      <div class="footer-social">
+        <a href="https://instagram.com/dr.albertonavarro" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://wa.me/5511999999999" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <p class="footer-copy">&copy; 2025 Dr. João Alberto Navarro · CREFITO 12: 443572-F · Todos os direitos reservados.</p>
+  </footer>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
