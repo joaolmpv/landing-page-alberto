@@ -14,24 +14,15 @@
 
   <!-- Preloader -->
   <div id="preloader" aria-hidden="true">
-    <div class="preloader-logo-wrap">
-      <svg class="preloader-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" width="120" height="120">
-        <circle class="logo-stroke" cx="60" cy="60" r="52" stroke="#A1887F" stroke-width="1.5" fill="none"/>
-        <path class="logo-stroke" d="M60 28 L60 92 M38 48 Q60 32 82 48 M38 72 Q60 88 82 72" stroke="#A1887F" stroke-width="2" stroke-linecap="round" fill="none"/>
-        <path class="logo-stroke" d="M48 60 L72 60" stroke="#BCAAA4" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-      </svg>
-    </div>
+    <div class="preloader-curtain"></div>
+    <div class="preloader-logo-wrap" id="preloader-logo-mount"></div>
   </div>
 
   <!-- Navbar -->
   <header>
     <nav id="navbar" class="navbar" aria-label="Navegação principal">
       <a href="#hero" class="navbar-logo" aria-label="Início">
-        <svg class="nav-logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" width="40" height="40" aria-hidden="true">
-          <circle cx="60" cy="60" r="52" stroke="#A1887F" stroke-width="1.5" fill="none"/>
-          <path d="M60 28 L60 92 M38 48 Q60 32 82 48 M38 72 Q60 88 82 72" stroke="#A1887F" stroke-width="2" stroke-linecap="round" fill="none"/>
-          <path d="M48 60 L72 60" stroke="#BCAAA4" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-        </svg>
+        <span id="nav-logo-slot" class="nav-logo-slot" aria-hidden="true"></span>
       </a>
       <ul class="navbar-links">
         <li><a href="#sobre">Sobre</a></li>
@@ -75,10 +66,7 @@
         </div>
         <div class="hero-visual">
           <div class="hero-photo-wrap">
-            <div class="img-placeholder hero-photo-placeholder" role="img" aria-label="Foto do Dr. João Alberto Navarro Nazaré">
-              <span class="placeholder-initials">JAN</span>
-            </div>
-            <!-- Substituir placeholder por: <img src="assets/images/hero-photo.webp" alt="Dr. João Alberto Navarro Nazaré, fisioterapeuta" width="480" height="600"> -->
+            <img src="assets/images/hero-photo.webp" alt="Dr. João Alberto Navarro Nazaré, fisioterapeuta" class="hero-photo">
           </div>
           <div class="hero-badge hero-badge-top">
             <span class="badge-small">Einstein · Dor Crônica</span>
@@ -439,10 +427,7 @@
   <footer class="site-footer">
     <div class="container footer-top">
       <div class="footer-brand">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" width="36" height="36" aria-hidden="true">
-          <circle cx="60" cy="60" r="52" stroke="#A1887F" stroke-width="1.5" fill="none"/>
-          <path d="M60 28 L60 92 M38 48 Q60 32 82 48 M38 72 Q60 88 82 72" stroke="#A1887F" stroke-width="2" stroke-linecap="round" fill="none"/>
-        </svg>
+        <span id="footer-logo-slot" class="footer-logo-slot" aria-hidden="true"></span>
         <p>Dr. João Alberto Navarro Nazaré · Fisioterapeuta</p>
       </div>
       <nav class="footer-links" aria-label="Links rápidos">

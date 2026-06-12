@@ -49,6 +49,37 @@ body.preloader-active {
   overflow: hidden;
 }
 
+body.preloader-active main,
+body.preloader-active .navbar-links,
+body.preloader-active .btn-nav-cta,
+body.preloader-active .navbar-hamburger {
+  visibility: hidden;
+}
+
+body.page-revealed main,
+body.page-revealed .navbar-links,
+body.page-revealed .btn-nav-cta,
+body.page-revealed .navbar-hamburger {
+  visibility: visible;
+}
+
+body.preloader-active .nav-logo-slot,
+body.preloader-active .footer-logo-slot {
+  opacity: 0;
+}
+
+.nav-logo-slot {
+  width: 48px;
+  height: 48px;
+  display: block;
+  line-height: 0;
+}
+
+.nav-logo-slot svg,
+.footer-logo-slot svg {
+  display: block;
+}
+
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -207,22 +238,58 @@ img {
   position: fixed;
   inset: 0;
   z-index: 10000;
+  pointer-events: none;
+}
+
+.preloader-curtain {
+  position: absolute;
+  inset: 0;
   background: var(--navy);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transform-origin: top center;
+  z-index: 1;
 }
 
 .preloader-logo-wrap {
+  position: fixed;
+  left: 50%;
+  top: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 160px;
+  height: 160px;
+  z-index: 2;
 }
 
-.preloader-logo .logo-stroke {
-  stroke-dasharray: 400;
-  stroke-dashoffset: 400;
+.preloader-logo-wrap svg,
+.preloader-logo {
+  width: 160px;
+  height: auto;
+  max-height: 160px;
+  display: block;
+  overflow: visible;
+}
+
+.preloader-logo-wrap .logo-stroke {
+  fill: none !important;
+  stroke: #F9F9F6 !important;
+}
+
+.nav-logo-slot svg {
+  width: 48px;
+  height: 48px;
+}
+
+.footer-logo-slot svg {
+  width: 42px;
+  height: 42px;
+  opacity: 0.9;
+}
+
+.nav-logo-slot .logo-stroke,
+.footer-logo-slot .logo-stroke {
+  fill: none;
+  stroke: #F9F9F6;
 }
 
 /* Navbar */
@@ -247,6 +314,9 @@ img {
 
 .navbar-logo {
   flex-shrink: 0;
+  display: block;
+  width: 48px;
+  height: 48px;
 }
 
 .navbar-links {
@@ -449,14 +519,22 @@ img {
 }
 
 .hero-photo-wrap {
+  position: relative;
   border-radius: 40% 60% 55% 45% / 50% 40% 60% 50%;
   border: 2px solid rgba(161, 136, 127, 0.3);
   overflow: hidden;
   aspect-ratio: 4 / 5;
+  isolation: isolate;
+  background: var(--navy-mid);
 }
 
-.hero-photo-placeholder {
-  min-height: 100%;
+.hero-photo-wrap .hero-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 12%;
 }
 
 .hero-badge {

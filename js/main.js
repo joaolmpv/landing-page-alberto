@@ -1,77 +1,208 @@
 gsap.registerPlugin(ScrollTrigger);
 
+const LOGO_COLOR = '#F9F9F6';
+const LOGO_STROKE_ANIM = 10;
+const LOGO_STROKE_STATIC = 22;
+const PRELOADER_LOGO_PX = 160;
+const NAV_LOGO_PX = 48;
+const FOOTER_LOGO_PX = 42;
+
 /* ============================================
    initPreloader
    ============================================ */
-function initPreloader() {
-  const preloader = document.getElementById('preloader');
-  const logoPaths = preloader?.querySelectorAll('.logo-stroke');
-  const logoWrap = preloader?.querySelector('.preloader-logo-wrap');
-  const navLogo = document.querySelector('.navbar-logo');
-
-  if (!preloader || !logoPaths?.length) {
-    initHeroAnimations();
-    return;
+async function loadLogoSvg() {
+  try {
+    const response = await fetch('assets/images/logo.svg');
+    if (!response.ok) throw new Error('fetch failed');
+    const svgText = await response.text();
+    const doc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+    const svg = doc.querySelector('svg');
+    if (!svg || doc.querySelector('parsererror')) throw new Error('invalid svg');
+    return document.importNode(svg, true);
+  } catch (error) {
+    console.warn('Logo SVG:', error);
+    return null;
   }
+}
+
+function styleLogoPaths(svgRoot, { animated = false } = {}) {
+  const paths = svgRoot.querySelectorAll('path, circle, ellipse, line, polyline, polygon, rect');
+  const drawPaths = [];
+  const strokeWidth = animated ? LOGO_STROKE_ANIM : LOGO_STROKE_STATIC;
+
+  paths.forEach((el) => {
+    if (typeof el.getTotalLength !== 'function') return;
+    const length = el.getTotalLength();
+    if (!length || length < 2) return;
+
+    el.setAttribute('fill', 'none');
+    el.setAttribute('stroke', LOGO_COLOR);
+    el.setAttribute('stroke-width', String(strokeWidth));
+    el.setAttribute('stroke-linecap', 'round');
+    el.setAttribute('stroke-linejoin', 'round');
+
+    if (animated) {
+      el.classList.add('logo-stroke');
+      el.setAttribute('stroke-dasharray', String(length));
+      el.setAttribute('stroke-dashoffset', String(length));
+      el.style.strokeDasharray = String(length);
+      el.style.strokeDashoffset = String(length);
+      drawPaths.push(el);
+    } else {
+      el.removeAttribute('stroke-dasharray');
+      el.removeAttribute('stroke-dashoffset');
+    }
+  });
+
+  return drawPaths;
+}
+
+function mountStaticLogo(svg, slot, size) {
+  if (!svg || !slot) return;
+  const clone = svg.cloneNode(true);
+  clone.removeAttribute('width');
+  clone.removeAttribute('height');
+  clone.classList.add('site-logo-svg');
+  clone.style.width = `${size}px`;
+  clone.style.height = `${size}px`;
+  styleLogoPaths(clone, { animated: false });
+  slot.innerHTML = '';
+  slot.appendChild(clone);
+  slot.removeAttribute('aria-hidden');
+}
+
+async function initPreloader() {
+  const preloader = document.getElementById('preloader');
+  const curtain = preloader?.querySelector('.preloader-curtain');
+  const mount = document.getElementById('preloader-logo-mount');
+  const logoWrap = mount?.closest('.preloader-logo-wrap') || mount;
+  const navSlot = document.getElementById('nav-logo-slot');
+  const footerSlot = document.getElementById('footer-logo-slot');
+  const navAnchor = document.querySelector('.navbar-logo');
 
   document.body.classList.add('preloader-active');
 
-  logoPaths.forEach((path) => {
-    const length = path.getTotalLength();
-    path.style.strokeDasharray = String(length);
-    path.style.strokeDashoffset = String(length);
+  if (!preloader || !curtain || !mount || !logoWrap) {
+    document.body.classList.add('page-revealed', 'page-ready');
+    document.body.classList.remove('preloader-active');
+    initHeroAnimations();
+    initPageEffects();
+    return;
+  }
+
+  const svgSource = await loadLogoSvg();
+  if (!svgSource) {
+    preloader.style.display = 'none';
+    document.body.classList.remove('preloader-active');
+    document.body.classList.add('page-revealed', 'page-ready');
+    initHeroAnimations();
+    initPageEffects();
+    return;
+  }
+
+  const svg = svgSource.cloneNode(true);
+  svg.classList.add('preloader-logo');
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', 'Logo Dr. João Alberto');
+  svg.style.width = `${PRELOADER_LOGO_PX}px`;
+  svg.style.height = `${PRELOADER_LOGO_PX}px`;
+  mount.innerHTML = '';
+  mount.appendChild(svg);
+
+  const drawPaths = styleLogoPaths(svg, { animated: true });
+
+  gsap.set(logoWrap, {
+    position: 'fixed',
+    left: '50%',
+    top: '50%',
+    xPercent: -50,
+    yPercent: -50,
+    zIndex: 10002,
   });
 
-  const getNavOffset = () => {
-    if (!navLogo || !logoWrap) return { x: 0, y: 0 };
-    const nr = navLogo.getBoundingClientRect();
-    const wr = logoWrap.getBoundingClientRect();
-    const scaledW = wr.width * 0.15;
-    const scaledH = wr.height * 0.15;
+  const getNavTarget = () => {
+    const rect = navAnchor?.getBoundingClientRect();
+    if (!rect) {
+      return { left: 32, top: 32, scale: NAV_LOGO_PX / PRELOADER_LOGO_PX };
+    }
     return {
-      x: nr.left + nr.width / 2 - (wr.left + wr.width / 2),
-      y: nr.top + nr.height / 2 - (wr.top + wr.height / 2),
+      left: rect.left + rect.width / 2,
+      top: rect.top + rect.height / 2,
+      scale: NAV_LOGO_PX / PRELOADER_LOGO_PX,
     };
   };
 
-  const tl = gsap.timeline({
-    onComplete: () => {
-      preloader.style.display = 'none';
-      document.body.classList.remove('preloader-active');
-      gsap.set(logoWrap, { clearProps: 'transform' });
+  return new Promise((resolve) => {
+    const tl = gsap.timeline({
+      onComplete: () => {
+        mountStaticLogo(svgSource, navSlot, NAV_LOGO_PX);
+        mountStaticLogo(svgSource, footerSlot, FOOTER_LOGO_PX);
+        preloader.style.display = 'none';
+        document.body.classList.remove('preloader-active');
+        document.body.classList.add('page-revealed', 'page-ready');
+        gsap.set(logoWrap, { clearProps: 'all' });
+        mount.innerHTML = '';
+        resolve();
+      },
+    });
+
+    if (drawPaths.length) {
+      tl.to(drawPaths, {
+        strokeDashoffset: 0,
+        duration: 1.8,
+        ease: 'power2.inOut',
+        stagger: 0.025,
+      });
+      tl.to(
+        drawPaths,
+        {
+          attr: { 'stroke-width': LOGO_STROKE_STATIC },
+          duration: 0.35,
+          ease: 'power2.out',
+        },
+        '-=0.15'
+      );
+    }
+
+    tl.addLabel('reveal');
+
+    tl.call(() => {
+      document.body.classList.add('page-revealed');
       initHeroAnimations();
-    },
+    }, null, 'reveal');
+
+    tl.to(
+      logoWrap,
+      {
+        left: () => getNavTarget().left,
+        top: () => getNavTarget().top,
+        xPercent: -50,
+        yPercent: -50,
+        scale: () => getNavTarget().scale,
+        duration: 0.8,
+        ease: 'power2.inOut',
+      },
+      'reveal'
+    );
+
+    tl.to(
+      curtain,
+      {
+        scaleY: 0,
+        transformOrigin: 'top center',
+        duration: 1,
+        ease: 'power4.inOut',
+      },
+      'reveal'
+    );
   });
+}
 
-  tl.to(logoPaths, {
-    strokeDashoffset: 0,
-    duration: 1.8,
-    ease: 'power2.inOut',
-    stagger: 0.12,
-  });
-
-  tl.to(
-    logoWrap,
-    {
-      scale: 0.15,
-      x: () => getNavOffset().x,
-      y: () => getNavOffset().y,
-      duration: 0.8,
-      ease: 'power2.inOut',
-    },
-    '+=0.1'
-  );
-
-  tl.to(
-    preloader,
-    {
-      scaleY: 0,
-      transformOrigin: 'top center',
-      duration: 1,
-      ease: 'power4.inOut',
-    },
-    '-=0.4'
-  );
+function initPageEffects() {
+  initAbout();
+  initCards();
+  initCTA();
+  initCredentials();
 }
 
 /* ============================================
@@ -453,27 +584,27 @@ function initReducedMotion() {
 /* ============================================
    DOM Ready
    ============================================ */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  initNavbar();
+  initCases();
+  initCarousel();
 
   if (reduced) {
     const preloader = document.getElementById('preloader');
     if (preloader) preloader.style.display = 'none';
     document.body.classList.remove('preloader-active');
-    initNavbar();
-    initCases();
-    initCarousel();
+    document.body.classList.add('page-revealed', 'page-ready');
+    loadLogoSvg().then((svg) => {
+      mountStaticLogo(svg, document.getElementById('nav-logo-slot'), NAV_LOGO_PX);
+      mountStaticLogo(svg, document.getElementById('footer-logo-slot'), FOOTER_LOGO_PX);
+    });
     initReducedMotion();
     return;
   }
 
-  initPreloader();
-  initNavbar();
-  initAbout();
-  initCards();
-  initCases();
-  initCarousel();
-  initCTA();
-  initCredentials();
+  await initPreloader();
+  initPageEffects();
   initReducedMotion();
 });
