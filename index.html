@@ -5,10 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Fisioterapeuta especializado em dor crônica, reabilitação pós-operatória e fisioterapia esportiva. Pós-graduando pelo Hospital Albert Einstein. CREFITO 12: 443572-F.">
   <title>Dr. João Alberto Navarro Nazaré | Fisioterapeuta</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Dr. João Alberto Navarro Nazaré | Fisioterapeuta">
+  <meta property="og:description" content="Fisioterapeuta especializado em dor crônica, reabilitação pós-operatória e fisioterapia esportiva. Pós-graduando pelo Hospital Albert Einstein. CREFITO 12: 443572-F.">
+  <!-- TODO: og:image e twitter:image exigem URL absoluta. Substituir "https://SEU-DOMINIO-AQUI" pelo domínio real após o deploy (Vercel/Netlify). -->
+  <meta property="og:image" content="https://SEU-DOMINIO-AQUI/assets/images/hero-photo.webp">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dr. João Alberto Navarro Nazaré | Fisioterapeuta">
+  <meta name="twitter:description" content="Fisioterapeuta especializado em dor crônica, reabilitação pós-operatória e fisioterapia esportiva. Pós-graduando pelo Hospital Albert Einstein.">
+  <meta name="twitter:image" content="https://SEU-DOMINIO-AQUI/assets/images/hero-photo.webp">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230A192F'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='24' fill='%23A1887F' text-anchor='middle'%3EJAN%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=iphone1">
+  <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+  </script>
 </head>
 <body>
 
@@ -17,6 +32,19 @@
     <div class="preloader-curtain"></div>
     <div class="preloader-logo-wrap" id="preloader-logo-mount"></div>
   </div>
+  <script>
+    /* Safety net independente do GSAP/CDN: garante que o preloader nunca
+       trave a página por mais de 4s, mesmo se o gsap.min.js falhar ao
+       carregar ou o cálculo do SVG da logo travar. */
+    window.setTimeout(function () {
+      var preloader = document.getElementById('preloader');
+      if (preloader && preloader.style.display !== 'none') {
+        preloader.style.display = 'none';
+        document.body.classList.remove('preloader-active');
+        document.body.classList.add('page-revealed', 'page-ready');
+      }
+    }, 4000);
+  </script>
 
   <!-- Navbar -->
   <header>
@@ -28,6 +56,7 @@
         <li><a href="#sobre">Sobre</a></li>
         <li><a href="#especialidades">Especialidades</a></li>
         <li><a href="#casos">Casos</a></li>
+        <li><a href="#midia">Mídia</a></li>
         <li><a href="#contato">Contato</a></li>
       </ul>
       <a href="#contato" class="btn-nav-cta">Agendar Avaliação</a>
@@ -41,6 +70,7 @@
         <li><a href="#sobre">Sobre</a></li>
         <li><a href="#especialidades">Especialidades</a></li>
         <li><a href="#casos">Casos</a></li>
+        <li><a href="#midia">Mídia</a></li>
         <li><a href="#contato">Contato</a></li>
       </ul>
       <a href="#contato" class="btn-nav-cta drawer-cta">Agendar Avaliação</a>
@@ -63,10 +93,18 @@
             <a href="#contato" class="btn btn-primary">Agendar Avaliação</a>
             <a href="#especialidades" class="btn btn-secondary">Ver Especialidades</a>
           </div>
+          <a href="#depoimentos" class="hero-social-proof">
+            <span class="hero-social-avatars" aria-hidden="true">
+              <span class="hero-social-avatar">M</span>
+              <span class="hero-social-avatar">R</span>
+              <span class="hero-social-avatar">A</span>
+            </span>
+            <span class="hero-social-text">Depoimentos reais de pacientes <span class="hero-social-link">Ver histórias →</span></span>
+          </a>
         </div>
         <div class="hero-visual">
           <div class="hero-photo-wrap">
-            <img src="assets/images/hero-photo.webp" alt="Dr. João Alberto Navarro Nazaré, fisioterapeuta" class="hero-photo">
+            <img src="assets/images/hero-photo.webp" alt="Dr. João Alberto Navarro Nazaré, fisioterapeuta" class="hero-photo" width="900" height="1348" loading="eager" fetchpriority="high">
           </div>
           <div class="hero-badge hero-badge-top">
             <span class="badge-small">Einstein · Dor Crônica</span>
@@ -108,59 +146,95 @@
     <!-- Sobre -->
     <section id="sobre" class="about section-light">
       <div class="container about-grid">
-        <div class="about-visual">
-          <div class="about-image-wrap" id="about-parallax-wrap">
-            <div class="img-placeholder about-img-placeholder" role="img" aria-label="Dr. João Alberto em atendimento fisioterapêutico">
-              <svg class="anatomy-icon" viewBox="0 0 80 120" aria-hidden="true">
-                <ellipse cx="40" cy="18" rx="14" ry="16" stroke="#A1887F" stroke-width="1.5" fill="none"/>
-                <path d="M40 34 L40 70 M25 45 L55 45 M30 70 L20 95 M50 70 L60 95" stroke="#A1887F" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-              </svg>
+        <div class="about-visual" id="about-parallax-group">
+          <div class="about-carousel" id="about-carousel">
+            <div class="about-carousel-stage">
+              <div class="about-carousel-deck">
+                <div class="about-carousel-slide" data-index="0" data-depth="0">
+                  <img src="assets/images/atendimento-1.webp" alt="Dr. João Alberto em atendimento fisioterapêutico" loading="lazy" width="1200" height="800">
+                </div>
+                <div class="about-carousel-slide" data-index="1" data-depth="1">
+                  <img src="assets/images/atendimento-2.webp" alt="Dr. João Alberto em atendimento clínico" loading="lazy" width="1200" height="800">
+                </div>
+                <div class="about-carousel-slide" data-index="2" data-depth="2">
+                  <img src="assets/images/atendimento-3.webp" alt="Dr. João Alberto em sessão de fisioterapia" loading="lazy" width="1200" height="800">
+                </div>
+                <div class="about-carousel-slide" data-index="3" data-depth="3">
+                  <img src="assets/images/atendimento-4.webp" alt="Dr. João Alberto em avaliação funcional" loading="lazy" width="1200" height="800">
+                </div>
+                <div class="about-carousel-slide" data-index="4" data-depth="4">
+                  <img src="assets/images/atendimento-5.webp" alt="Dr. João Alberto em reabilitação" loading="lazy" width="1200" height="800">
+                </div>
+              </div>
             </div>
-            <!-- Substituir por: <img src="assets/images/atendimento-1.webp" alt="Atendimento fisioterapêutico" loading="lazy" class="about-img"> -->
+            <div class="about-carousel-controls">
+              <button type="button" class="about-carousel-btn about-carousel-prev" aria-label="Foto anterior">←</button>
+              <div class="about-carousel-dots" role="tablist" aria-label="Selecionar foto">
+                <button type="button" class="about-dot is-active" data-index="0" aria-label="Foto 1" aria-selected="true"></button>
+                <button type="button" class="about-dot" data-index="1" aria-label="Foto 2" aria-selected="false"></button>
+                <button type="button" class="about-dot" data-index="2" aria-label="Foto 3" aria-selected="false"></button>
+                <button type="button" class="about-dot" data-index="3" aria-label="Foto 4" aria-selected="false"></button>
+                <button type="button" class="about-dot" data-index="4" aria-label="Foto 5" aria-selected="false"></button>
+              </div>
+              <button type="button" class="about-carousel-btn about-carousel-next" aria-label="Próxima foto">→</button>
+            </div>
           </div>
-          <div class="authority-badge shimmer-badge">
-            <div class="badge-logo-placeholder" aria-hidden="true">
-              <span class="serif gold-text">E</span>
+          <div class="about-badge-row">
+            <div class="authority-badge-small">
+              <span class="badge-small">UEPA</span>
+              <span class="badge-main dark-text">Graduação em Fisioterapia</span>
             </div>
-            <div>
-              <span class="badge-gold-label">Hospital Israelita Albert Einstein</span>
-              <span class="badge-white-text">Pós-graduando em Dor</span>
+            <div class="authority-badge-small authority-badge-einstein">
+              <img src="assets/images/einstein-logo.webp" alt="Hospital Albert Einstein" width="36" height="36" loading="lazy">
+              <div>
+                <span class="badge-einstein-label">Hospital Albert Einstein</span>
+                <span class="badge-einstein-text">Pós-graduação em Dor</span>
+              </div>
             </div>
-          </div>
-          <div class="authority-badge-small">
-            <span class="badge-small">UEPA</span>
-            <span class="badge-main dark-text">Graduação em Fisioterapia</span>
           </div>
         </div>
         <div class="about-content">
           <p class="section-label">Sobre o Profissional</p>
           <h2 class="serif about-title">João Alberto<br>Navarro Nazaré.</h2>
           <div class="section-line"></div>
-          <p>Fisioterapeuta graduado pela Universidade do Estado do Pará (UEPA), pós-graduando em Dor pelo Hospital Israelita Albert Einstein — referência mundial em saúde. Sua prática combina a ciência moderna da dor com protocolos internacionais de reabilitação esportiva, certificados pela FIFA.</p>
-          <p>Especializado em reabilitação pós-operatória de artroplastias, lesões ligamentares e fraturas, atua com uma filosofia clara: menos dependência medicamentosa, mais funcionalidade e movimento consciente.</p>
+          <p>Sou fisioterapeuta, graduado pela Universidade do Estado do Pará (UEPA) e pós-graduando em Dor pelo Hospital Israelita Albert Einstein — uma das maiores referências mundiais em medicina e pesquisa científica —, minha formação une o rigor acadêmico à prática clínica avançada, com Especialização adicional em Fisioterapia Ortopédica pelo Centro Educacional Sete de Setembro. Atuo no tratamento de casos complexos de dores crônicas e na reabilitação pós-operatória de artroplastias de quadril e joelho, lesões ligamentares, fraturas e patologias traumato-ortopédicas. Certificado pelo FIFA Diploma in Football Medicine, também acompanho atletas com foco em prevenção de lesões, performance e retorno seguro ao esporte. Minha filosofia é simples: menos dependência de medicamentos, mais funcionalidade, movimento consciente e qualidade de vida real.</p>
           <div class="timeline" id="timeline">
             <div class="timeline-line" id="timeline-line"></div>
             <div class="timeline-point" data-point="1">
               <div class="timeline-dot"></div>
               <div class="timeline-text">
                 <h3 class="serif">UEPA</h3>
-                <p>Graduação em Fisioterapia</p>
+                <p>Graduação em Fisioterapia · Universidade do Estado do Pará</p>
               </div>
             </div>
             <div class="timeline-point" data-point="2">
               <div class="timeline-dot"></div>
               <div class="timeline-text">
                 <h3 class="serif">Sete de Setembro</h3>
-                <p>Fisioterapia Ortopédica Avançada</p>
+                <p>Especialização em Fisioterapia Ortopédica Avançada · Centro Educacional</p>
               </div>
             </div>
             <div class="timeline-point timeline-point-gold" data-point="3">
               <div class="timeline-dot timeline-dot-gold"></div>
               <div class="timeline-text">
                 <h3 class="serif shimmer-text">Einstein</h3>
-                <p class="shimmer-text">Pós-graduação em Dor · Em curso</p>
+                <p class="shimmer-text">Pós-graduação em Dor · Hospital Israelita Albert Einstein · Em curso</p>
               </div>
             </div>
+            <div class="timeline-point timeline-point-gold" data-point="4">
+              <div class="timeline-dot timeline-dot-gold"></div>
+              <div class="timeline-text">
+                <h3 class="serif">FIFA</h3>
+                <p>Diploma in Football Medicine · Certificação Internacional</p>
+              </div>
+            </div>
+          </div>
+          <div class="about-address">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11z" stroke="var(--clay)" stroke-width="1.5" stroke-linejoin="round"/>
+              <circle cx="12" cy="10" r="2.5" stroke="var(--clay)" stroke-width="1.5"/>
+            </svg>
+            <p>Av. São Sebastião, 573 — Santa Clara · Santarém, PA / Edifício Cristal, sala 605. Atendimento presencial e online para todo o Brasil e exterior.</p>
           </div>
         </div>
       </div>
@@ -175,6 +249,7 @@
         </header>
         <div class="cards-grid" id="cards-grid">
           <article class="expertise-card">
+            <!-- TODO: adicionar assets/images/especialidade-dor.webp (arquivo ainda não existe) e reintroduzir <div class="card-bg-img"><img loading="lazy"></div> -->
             <svg class="card-icon" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
               <path d="M4 14 Q8 6 14 14 T24 14" stroke="#A1887F" stroke-width="1.5" fill="none"/>
               <path d="M4 18 Q8 26 14 18 T24 18" stroke="#A1887F" stroke-width="1.5" fill="none" opacity="0.6"/>
@@ -188,6 +263,7 @@
             </div>
           </article>
           <article class="expertise-card expertise-card-featured">
+            <!-- TODO: adicionar assets/images/especialidade-posop.webp (arquivo ainda não existe) e reintroduzir <div class="card-bg-img"><img loading="lazy"></div> -->
             <svg class="card-icon" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
               <circle cx="10" cy="14" r="5" stroke="#A1887F" stroke-width="1.5" fill="none"/>
               <circle cx="18" cy="14" r="5" stroke="#A1887F" stroke-width="1.5" fill="none"/>
@@ -202,6 +278,7 @@
             </div>
           </article>
           <article class="expertise-card">
+            <!-- TODO: adicionar assets/images/especialidade-esportiva.webp (arquivo ainda não existe) e reintroduzir <div class="card-bg-img"><img loading="lazy"></div> -->
             <svg class="card-icon" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
               <circle cx="14" cy="8" r="4" stroke="#A1887F" stroke-width="1.5" fill="none"/>
               <path d="M8 26 Q14 16 20 26" stroke="#A1887F" stroke-width="1.5" fill="none"/>
@@ -216,6 +293,7 @@
             </div>
           </article>
           <article class="expertise-card">
+            <!-- TODO: adicionar assets/images/especialidade-avaliacao.webp (arquivo ainda não existe) e reintroduzir <div class="card-bg-img"><img loading="lazy"></div> -->
             <svg class="card-icon" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
               <rect x="6" y="4" width="16" height="20" rx="2" stroke="#A1887F" stroke-width="1.5" fill="none"/>
               <path d="M10 12 L13 15 L18 10" stroke="#A1887F" stroke-width="1.5" fill="none" stroke-linecap="round"/>
@@ -241,79 +319,169 @@
           <p class="cases-subtitle">Casos representativos da prática clínica. Identidades preservadas.</p>
         </header>
 
-        <div class="clinical-case" data-case="1">
-          <button type="button" class="case-accordion-toggle" aria-expanded="false">
-            <span class="serif">Caso 1 — Dor Crônica</span>
-            <span class="accordion-icon" aria-hidden="true"></span>
-          </button>
-          <div class="case-flow">
-            <div class="case-block">
-              <div class="progress-line case-progress"></div>
-              <span class="block-label">Diagnóstico</span>
-              <h3 class="serif block-title">Lombalgia Crônica Inespecífica com componente neuropático central</h3>
-              <p class="block-text">Profissional de 45 anos, lombalgia crônica há 3 anos, sem resultado em dois tratamentos anteriores.</p>
+        <div class="iphone-stage">
+          <article class="iphone-card">
+            <div class="iphone-wrap">
+              <svg viewBox="0 0 320 650" width="100%" height="100%" aria-hidden="true">
+                <defs>
+                  <linearGradient id="phoneShine-1" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="white" stop-opacity="0.06"/>
+                    <stop offset="100%" stop-color="white" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <rect x="10" y="0" width="300" height="650" rx="44" ry="44" fill="#1A1A1F"/>
+                <rect x="12" y="2" width="296" height="646" rx="43" ry="43" fill="none" stroke="#3A3A4A" stroke-width="1.5"/>
+                <rect id="screen-1" x="18" y="16" width="284" height="618" rx="36" ry="36" fill="#000"/>
+                <rect x="120" y="24" width="80" height="26" rx="13" ry="13" fill="#0A0A0E"/>
+                <rect x="10" y="0" width="60" height="650" rx="44" ry="44" fill="url(#phoneShine-1)"/>
+                <rect x="8" y="160" width="3" height="60" rx="1.5" fill="#2A2A35"/>
+                <rect x="8" y="235" width="3" height="60" rx="1.5" fill="#2A2A35"/>
+                <rect x="309" y="200" width="3" height="80" rx="1.5" fill="#2A2A35"/>
+              </svg>
+              <div class="iphone-screen-content">
+                <img class="iphone-thumb" src="assets/images/thumb-metatarso.webp" alt="Antes e depois — 5° Metatarso" loading="lazy">
+                <div class="iphone-play-overlay">
+                  <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+                    <circle cx="32" cy="32" r="30" fill="rgba(10,25,47,0.5)" stroke="rgba(245,240,232,0.6)" stroke-width="1.5"/>
+                    <path fill="rgba(245,240,232,0.9)" d="M26,20 L26,44 L46,32 Z"/>
+                  </svg>
+                </div>
+              </div>
             </div>
-            <div class="case-block">
-              <div class="progress-line case-progress"></div>
-              <span class="block-label">Abordagem</span>
-              <p class="block-text">Protocolo multimodal baseado no modelo biopsicossocial da dor, com terapia manual, exercício progressivo e educação em dor (Pain Neuroscience Education).</p>
+            <div class="iphone-caption">
+              <span class="iphone-case-num">Caso 01</span>
+              <h3 class="serif iphone-case-title">Antes × Depois — 5° Metatarso</h3>
+              <p class="iphone-case-desc">Fratura do 5° metatarso tratada de forma conservadora. Protocolo de reabilitação funcional progressiva com retorno às atividades sem necessidade de cirurgia.</p>
+              <button type="button" class="iphone-watch-btn" data-video="assets/videos/caso-metatarso.mp4" data-title="Antes × Depois — 5° Metatarso" data-desc="Tratamento conservador de fratura do 5° metatarso com protocolo de reabilitação funcional progressiva e retorno às atividades sem cirurgia.">Assistir</button>
             </div>
-            <div class="case-block case-block-outcome">
-              <div class="progress-line case-progress"></div>
-              <span class="block-label">Resultado</span>
-              <p class="outcome-text serif">Redução de 80% na escala de dor (EVA). Alta com autonomia e retorno à vida profissional completa em 14 semanas.</p>
+          </article>
+
+          <article class="iphone-card iphone-card--center">
+            <div class="iphone-wrap">
+              <svg viewBox="0 0 320 650" width="100%" height="100%" aria-hidden="true">
+                <defs>
+                  <linearGradient id="phoneShine-2" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="white" stop-opacity="0.06"/>
+                    <stop offset="100%" stop-color="white" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <rect x="10" y="0" width="300" height="650" rx="44" ry="44" fill="#1A1A1F"/>
+                <rect x="12" y="2" width="296" height="646" rx="43" ry="43" fill="none" stroke="#3A3A4A" stroke-width="1.5"/>
+                <rect id="screen-2" x="18" y="16" width="284" height="618" rx="36" ry="36" fill="#000"/>
+                <rect x="120" y="24" width="80" height="26" rx="13" ry="13" fill="#0A0A0E"/>
+                <rect x="10" y="0" width="60" height="650" rx="44" ry="44" fill="url(#phoneShine-2)"/>
+                <rect x="8" y="160" width="3" height="60" rx="1.5" fill="#2A2A35"/>
+                <rect x="8" y="235" width="3" height="60" rx="1.5" fill="#2A2A35"/>
+                <rect x="309" y="200" width="3" height="80" rx="1.5" fill="#2A2A35"/>
+              </svg>
+              <div class="iphone-screen-content">
+                <img class="iphone-thumb" src="assets/images/thumb-tibia-fibula.webp" alt="Antes e depois — Tíbia e Fíbula" loading="lazy">
+                <div class="iphone-play-overlay">
+                  <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+                    <circle cx="32" cy="32" r="30" fill="rgba(10,25,47,0.5)" stroke="rgba(245,240,232,0.6)" stroke-width="1.5"/>
+                    <path fill="rgba(245,240,232,0.9)" d="M26,20 L26,44 L46,32 Z"/>
+                  </svg>
+                </div>
+              </div>
             </div>
-          </div>
+            <div class="iphone-caption">
+              <span class="iphone-case-num">Caso 02</span>
+              <h3 class="serif iphone-case-title">Antes × Depois — Tíbia e Fíbula</h3>
+              <p class="iphone-case-desc">Reabilitação pós-operatória de fratura complexa de tíbia e fíbula, desde a fase hospitalar até o retorno funcional completo com protocolo progressivo individualizado.</p>
+              <button type="button" class="iphone-watch-btn" data-video="assets/videos/caso-tibia-fibula.mp4" data-title="Antes × Depois — Tíbia e Fíbula" data-desc="Reabilitação pós-operatória de fratura complexa de tíbia e fíbula. Protocolo progressivo desde a fase hospitalar até o retorno funcional completo.">Assistir</button>
+            </div>
+          </article>
+
+          <article class="iphone-card">
+            <div class="iphone-wrap">
+              <svg viewBox="0 0 320 650" width="100%" height="100%" aria-hidden="true">
+                <defs>
+                  <linearGradient id="phoneShine-3" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="white" stop-opacity="0.06"/>
+                    <stop offset="100%" stop-color="white" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <rect x="10" y="0" width="300" height="650" rx="44" ry="44" fill="#1A1A1F"/>
+                <rect x="12" y="2" width="296" height="646" rx="43" ry="43" fill="none" stroke="#3A3A4A" stroke-width="1.5"/>
+                <rect id="screen-3" x="18" y="16" width="284" height="618" rx="36" ry="36" fill="#000"/>
+                <rect x="120" y="24" width="80" height="26" rx="13" ry="13" fill="#0A0A0E"/>
+                <rect x="10" y="0" width="60" height="650" rx="44" ry="44" fill="url(#phoneShine-3)"/>
+                <rect x="8" y="160" width="3" height="60" rx="1.5" fill="#2A2A35"/>
+                <rect x="8" y="235" width="3" height="60" rx="1.5" fill="#2A2A35"/>
+                <rect x="309" y="200" width="3" height="80" rx="1.5" fill="#2A2A35"/>
+              </svg>
+              <div class="iphone-screen-content">
+                <img class="iphone-thumb" src="assets/images/thumb-cefaleia.webp" alt="Tratamento de Cefaleia — Enxaqueca Crônica" loading="lazy">
+                <div class="iphone-play-overlay">
+                  <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+                    <circle cx="32" cy="32" r="30" fill="rgba(10,25,47,0.5)" stroke="rgba(245,240,232,0.6)" stroke-width="1.5"/>
+                    <path fill="rgba(245,240,232,0.9)" d="M26,20 L26,44 L46,32 Z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="iphone-caption">
+              <span class="iphone-case-num">Caso 03</span>
+              <h3 class="serif iphone-case-title">Cefaleia — Enxaqueca Crônica</h3>
+              <p class="iphone-case-desc">Abordagem fisioterapêutica para cefaleia tensional e enxaqueca crônica com técnicas manuais, reequilíbrio postural e educação em dor para redução da frequência das crises.</p>
+              <button type="button" class="iphone-watch-btn" data-video="assets/videos/caso-cefaleia.mp4" data-title="Cefaleia — Enxaqueca Crônica" data-desc="Abordagem fisioterapêutica para cefaleia tensional e enxaqueca crônica, com técnicas manuais, reequilíbrio postural e educação em dor para redução da frequência das crises.">Assistir</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Na Mídia -->
+    <section id="midia" class="media section-dark">
+      <div class="container">
+        <header class="section-header-center">
+          <p class="section-label">Na Mídia</p>
+          <h2 class="serif section-title-light">O Dr. João Alberto<br>nas telas do Brasil.</h2>
+          <p class="media-subtitle">Entrevistas e participações em programas de televisão levando informação sobre saúde, fisioterapia e bem-estar para o público paraense e nacional.</p>
+        </header>
+
+        <div class="media-grid">
+          <article class="media-card">
+            <div class="media-thumb">
+              <span class="media-channel-tag">Bom Dia Tapajós · TV Globo</span>
+              <svg class="media-play-icon" width="52" height="52" viewBox="0 0 52 52" aria-hidden="true">
+                <circle cx="26" cy="26" r="24" fill="none" stroke="#A1887F" stroke-width="1.5"/>
+                <path d="M22 17 L36 26 L22 35 Z" fill="#A1887F"/>
+              </svg>
+            </div>
+            <div class="media-info">
+              <p class="media-channel-label">Globo · G1 Santarém</p>
+              <h3 class="serif media-card-title">Travesseiro e a Qualidade do Sono</h3>
+              <p>A escolha incorreta do travesseiro pode causar dores no pescoço e nas costas. Dr. João Alberto explica como prevenir.</p>
+              <a class="media-link" href="https://g1.globo.com/pa/santarem-regiao/videos-bom-dia-tapajos/video/travesseiro-e-a-qualidade-do-sono-escolha-incorreta-pode-causar-dores-no-pescoco-e-costas-14297561.ghtml" target="_blank" rel="noopener noreferrer">Assistir entrevista →</a>
+            </div>
+          </article>
+
+          <article class="media-card">
+            <div class="media-thumb">
+              <span class="media-channel-tag">Bom Dia Tapajós · TV Globo</span>
+              <svg class="media-play-icon" width="52" height="52" viewBox="0 0 52 52" aria-hidden="true">
+                <circle cx="26" cy="26" r="24" fill="none" stroke="#A1887F" stroke-width="1.5"/>
+                <path d="M22 17 L36 26 L22 35 Z" fill="#A1887F"/>
+              </svg>
+            </div>
+            <div class="media-info">
+              <p class="media-channel-label">Globo · G1 Santarém</p>
+              <h3 class="serif media-card-title">Inflamação no Nervo Ciático</h3>
+              <p>O problema pode dificultar movimentos simples do dia a dia. Dr. João Alberto esclarece causas, sintomas e tratamento com fisioterapia.</p>
+              <a class="media-link" href="https://g1.globo.com/pa/santarem-regiao/videos-bom-dia-tapajos/video/inflamacao-no-nervo-ciatico-problema-pode-dificultar-movimentos-simples-do-dia-a-dia-14571098.ghtml" target="_blank" rel="noopener noreferrer">Assistir entrevista →</a>
+            </div>
+          </article>
         </div>
 
-        <div class="clinical-case" data-case="2">
-          <button type="button" class="case-accordion-toggle" aria-expanded="false">
-            <span class="serif">Caso 2 — Pós-Operatório LCA</span>
-            <span class="accordion-icon" aria-hidden="true"></span>
-          </button>
-          <div class="case-flow">
-            <div class="case-block">
-              <div class="progress-line case-progress"></div>
-              <span class="block-label">Diagnóstico</span>
-              <h3 class="serif block-title">Pós-operatório de reconstrução do Ligamento Cruzado Anterior, semana 2</h3>
-              <p class="block-text">Atleta amador de 38 anos, reconstrução do LCA joelho direito.</p>
-            </div>
-            <div class="case-block">
-              <div class="progress-line case-progress"></div>
-              <span class="block-label">Abordagem</span>
-              <p class="block-text">Protocolo acelerado baseado em critérios funcionais, fortalecimento neuromuscular, controle do edema e reintegração esportiva progressiva.</p>
-            </div>
-            <div class="case-block case-block-outcome">
-              <div class="progress-line case-progress"></div>
-              <span class="block-label">Resultado</span>
-              <p class="outcome-text serif">Retorno ao futebol amador em 8 meses com 100% dos critérios de alta cumpridos. Zero recidiva em 12 meses de acompanhamento.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="clinical-case" data-case="3">
-          <button type="button" class="case-accordion-toggle" aria-expanded="false">
-            <span class="serif">Caso 3 — Artroplastia de Quadril</span>
-            <span class="accordion-icon" aria-hidden="true"></span>
-          </button>
-          <div class="case-flow">
-            <div class="case-block">
-              <div class="progress-line case-progress"></div>
-              <span class="block-label">Diagnóstico</span>
-              <h3 class="serif block-title">Pós-operatório de Artroplastia Total de Quadril, fase hospitalar</h3>
-              <p class="block-text">Paciente de 68 anos, prótese total de quadril.</p>
-            </div>
-            <div class="case-block">
-              <div class="progress-line case-progress"></div>
-              <span class="block-label">Abordagem</span>
-              <p class="block-text">Reabilitação precoce iniciada em 24h, prevenção de complicações tromboembólicas e fraqueza muscular, progressão funcional segura com protocolos de precaução específicos.</p>
-            </div>
-            <div class="case-block case-block-outcome">
-              <div class="progress-line case-progress"></div>
-              <span class="block-label">Resultado</span>
-              <p class="outcome-text serif">Deambulação independente em 5 dias. Alta hospitalar no prazo. Retorno completo às atividades de vida diária em 6 semanas.</p>
-            </div>
-          </div>
+        <div class="media-highlight-bar">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" stroke="#A1887F" stroke-width="1.5"/>
+            <path d="M3 12h18M12 3c2.5 2.8 3.8 5.8 3.8 9s-1.3 6.2-3.8 9c-2.5-2.8-3.8-5.8-3.8-9s1.3-6.2 3.8-9z" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+          </svg>
+          <p class="media-highlight-quote serif">Atendimento online disponível para todo o Brasil e para pacientes no exterior.</p>
+          <p class="media-highlight-sub">Consulta de avaliação, acompanhamento e orientação clínica via telemedicina. Agende sua sessão online pelo WhatsApp.</p>
+          <a href="#contato" class="btn btn-primary">Agendar Online</a>
         </div>
       </div>
     </section>
@@ -391,8 +559,7 @@
         <div class="section-line section-line-center"></div>
         <p class="cta-desc">O primeiro passo para uma vida com menos dor começa com uma conversa. Contato direto e sem burocracia.</p>
         <div class="cta-buttons">
-          <!-- TODO: Substituir 5511999999999 pelo número real do WhatsApp -->
-          <a href="https://wa.me/5511999999999" class="btn btn-primary btn-whatsapp" target="_blank" rel="noopener noreferrer">
+          <a href="https://wa.me/5593992389085" class="btn btn-primary btn-whatsapp" target="_blank" rel="noopener noreferrer">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             Falar pelo WhatsApp
           </a>
@@ -419,9 +586,89 @@
             <a href="https://linktr.ee/albertofisio" class="contact-value link" target="_blank" rel="noopener noreferrer">linktr.ee/albertofisio</a>
           </div>
         </div>
+        <div class="contact-extra-info">
+          <div class="contact-address-block">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11z" stroke="#A1887F" stroke-width="1.5" stroke-linejoin="round"/>
+              <circle cx="12" cy="10" r="2.5" stroke="#A1887F" stroke-width="1.5"/>
+            </svg>
+            <div>
+              <span class="contact-extra-label">Consultório Presencial</span>
+              <p class="contact-extra-text">Av. São Sebastião, 573 — Santa Clara · Santarém, PA / Edifício Cristal, sala 605</p>
+            </div>
+          </div>
+          <div class="contact-online-block">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" stroke="#A1887F" stroke-width="1.5"/>
+              <path d="M3 12h18M12 3c2.5 2.8 3.8 5.8 3.8 9s-1.3 6.2-3.8 9c-2.5-2.8-3.8-5.8-3.8-9s1.3-6.2 3.8-9z" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+            </svg>
+            <div>
+              <span class="contact-extra-label">Atendimento Online</span>
+              <p class="contact-extra-text">Para todo o Brasil e exterior via telemedicina — mesma qualidade, sem distância.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="booking-form-wrap">
+          <p class="section-label">Prefere que a gente te chame?</p>
+          <h3 class="serif booking-form-title">Solicite sua avaliação</h3>
+          <p class="booking-form-note">Preencha os dados abaixo. <strong>Isso ainda não confirma seu horário</strong> — nossa equipe entra em contato pelo WhatsApp para combinar data e horário.</p>
+
+          <form id="booking-form" class="booking-form" novalidate>
+            <div class="booking-field">
+              <label for="booking-name">Nome completo</label>
+              <input type="text" id="booking-name" name="name" autocomplete="name" required>
+            </div>
+            <div class="booking-field">
+              <label for="booking-phone">WhatsApp / Telefone</label>
+              <input type="tel" id="booking-phone" name="phone" autocomplete="tel" placeholder="(93) 99238-9085" required>
+            </div>
+            <div class="booking-field">
+              <label for="booking-reason">Motivo da consulta</label>
+              <select id="booking-reason" name="reason" required>
+                <option value="" disabled selected>Selecione...</option>
+                <option value="Dor Crônica">Dor Crônica</option>
+                <option value="Pós-Operatório / Traumato-Ortopédica">Pós-Operatório / Traumato-Ortopédica</option>
+                <option value="Fisioterapia Esportiva">Fisioterapia Esportiva</option>
+                <option value="Avaliação Funcional">Avaliação Funcional</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+            <div class="booking-field">
+              <label for="booking-period">Melhor período para contato</label>
+              <select id="booking-period" name="period">
+                <option value="Sem preferência">Sem preferência</option>
+                <option value="Manhã">Manhã</option>
+                <option value="Tarde">Tarde</option>
+                <option value="Noite">Noite</option>
+              </select>
+            </div>
+            <div class="booking-field booking-field-full">
+              <label for="booking-message">Mensagem (opcional)</label>
+              <textarea id="booking-message" name="message" rows="3" placeholder="Conte um pouco sobre o que está sentindo..."></textarea>
+            </div>
+            <div class="booking-field booking-field-full">
+              <button type="submit" class="btn btn-primary booking-submit">Solicitar Avaliação</button>
+              <p id="booking-status" class="booking-status" role="status" aria-live="polite"></p>
+              <p class="booking-consent">Ao enviar, você concorda em ser contatado por WhatsApp ou telefone para confirmar seu horário. Nenhum agendamento é confirmado automaticamente por este formulário.</p>
+            </div>
+          </form>
+        </div>
       </div>
     </section>
   </main>
+
+  <a
+    href="https://wa.me/5593992389085?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o."
+    class="mobile-sticky-cta"
+    id="mobile-sticky-cta"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Agendar avaliação pelo WhatsApp"
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span>Agendar no WhatsApp</span>
+  </a>
 
   <!-- Footer -->
   <footer class="site-footer">
@@ -434,13 +681,14 @@
         <a href="#sobre">Sobre</a>
         <a href="#especialidades">Especialidades</a>
         <a href="#casos">Casos</a>
+        <a href="#midia">Mídia</a>
         <a href="#contato">Contato</a>
       </nav>
       <div class="footer-social">
         <a href="https://instagram.com/dr.albertonavarro" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         </a>
-        <a href="https://wa.me/5511999999999" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer">
+        <a href="https://wa.me/5593992389085" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         </a>
       </div>
@@ -449,9 +697,32 @@
     <p class="footer-copy">&copy; 2025 Dr. João Alberto Navarro · CREFITO 12: 443572-F · Todos os direitos reservados.</p>
   </footer>
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <div id="video-modal" class="vmodal" aria-hidden="true" role="dialog" aria-label="Player de vídeo clínico">
+    <div class="vmodal-backdrop" id="vmodal-backdrop"></div>
+    <div class="vmodal-container">
+      <button type="button" id="vmodal-close" class="vmodal-close" aria-label="Fechar vídeo">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path d="M18 6 L6 18" fill="none" stroke="rgba(245,240,232,0.8)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M6 6 L18 18" fill="none" stroke="rgba(245,240,232,0.8)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="vmodal-phone-frame">
+        <div class="vmodal-video-wrap">
+          <video id="vmodal-player" class="vmodal-video" controls playsinline preload="none">
+            <source id="vmodal-source" src="" type="video/mp4">
+            <p>Seu navegador não suporta reprodução de vídeo.</p>
+          </video>
+        </div>
+      </div>
+      <div class="vmodal-info">
+        <p id="vmodal-title" class="serif vmodal-title"></p>
+        <p id="vmodal-desc" class="vmodal-desc"></p>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=iphone1"></script>
 </body>
 </html>
