@@ -2613,6 +2613,18 @@ img {
     line-height: 1.65;
   }
 
+  /* No desktop a tag "via Instagram" flutua no canto superior direito do
+     card sem problema, mas em telas estreitas ela caía em cima da
+     primeira linha da citação. Em vez de tentar reservar espaço com
+     padding, tira do posicionamento absoluto: vira uma legenda normal
+     logo abaixo do autor, sem risco de sobrepor o texto. */
+  .testimonial-source {
+    position: static;
+    display: block;
+    margin-top: 0.75rem;
+    text-align: left;
+  }
+
   .carousel-wrap {
     gap: 0.5rem;
   }
