@@ -965,11 +965,13 @@ function initIphoneModal() {
 
 /* ============================================
    initCasesCarousel
-   Roleta 3D dos casos clínicos: em telas com mouse (hover fino,
-   >= 901px) os 5 cartões viram um coverflow posicionado via
-   custom properties (--tx/--rot/--sc/--op/--z), navegável pela
-   roda do mouse, setas e dots. Em mobile/touch os cartões seguem
-   em lista vertical simples (sem transform), sem roleta.
+   Roleta 3D dos casos clínicos: os 5 cartões ficam sempre em coverflow,
+   posicionados via custom properties (--tx/--rot/--sc/--op/--z). Em
+   telas com mouse a roda do mouse gira a roleta (preventDefault trava o
+   scroll da página enquanto o cursor está sobre ela); em qualquer
+   tamanho de tela dá pra usar as setas, os dots, arrastar (swipe) ou
+   tocar num cartão lateral para centralizá-lo. Espaçamento entre os
+   cartões encolhe em telas estreitas via getSteps().
    ============================================ */
 function initCasesCarousel() {
   const wrap = document.getElementById('cases-carousel');
@@ -985,16 +987,28 @@ function initCasesCarousel() {
   const dotsWrap = document.getElementById('iphone-carousel-dots');
   const dots = dotsWrap ? Array.from(dotsWrap.querySelectorAll('.iphone-dot')) : [];
 
-  const STEPS = {
+  const STEPS_DESKTOP = {
     0: { tx: 0, rot: 0, sc: 1, op: 1, z: 5 },
     1: { tx: 190, rot: 20, sc: 0.82, op: 0.62, z: 3 },
     2: { tx: 330, rot: 32, sc: 0.64, op: 0.28, z: 1 },
   };
-  const FAR = { tx: 420, rot: 36, sc: 0.5, op: 0, z: 0 };
+  const FAR_DESKTOP = { tx: 420, rot: 36, sc: 0.5, op: 0, z: 0 };
 
-  const mq = window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 901px)');
+  const STEPS_MOBILE = {
+    0: { tx: 0, rot: 0, sc: 1, op: 1, z: 5 },
+    1: { tx: 128, rot: 24, sc: 0.72, op: 0.55, z: 3 },
+    2: { tx: 210, rot: 34, sc: 0.54, op: 0.24, z: 1 },
+  };
+  const FAR_MOBILE = { tx: 260, rot: 38, sc: 0.42, op: 0, z: 0 };
+
+  const hoverMq = window.matchMedia('(hover: hover) and (pointer: fine)');
   let current = Math.floor(total / 2);
   let wheelLock = false;
+  let touchStartX = 0;
+
+  const isMobile = () => window.innerWidth < 641;
+  const getSteps = () => (isMobile() ? STEPS_MOBILE : STEPS_DESKTOP);
+  const getFar = () => (isMobile() ? FAR_MOBILE : FAR_DESKTOP);
 
   const normalize = (index) => ((index % total) + total) % total;
 
@@ -1007,6 +1021,8 @@ function initCasesCarousel() {
   };
 
   const applyPositions = () => {
+    const steps = getSteps();
+    const far = getFar();
     cards.forEach((card, i) => {
       let diff = i - current;
       if (diff > total / 2) diff -= total;
@@ -1014,7 +1030,7 @@ function initCasesCarousel() {
 
       const absDiff = Math.abs(diff);
       const dir = Math.sign(diff);
-      const step = STEPS[absDiff] || FAR;
+      const step = steps[absDiff] || far;
 
       card.style.setProperty('--tx', `${dir * step.tx}px`);
       card.style.setProperty('--rot', `${-dir * step.rot}deg`);
@@ -1034,30 +1050,6 @@ function initCasesCarousel() {
     applyPositions();
   };
 
-  const clearInline = () => {
-    cards.forEach((card) => {
-      ['--tx', '--rot', '--sc', '--op', '--z', '--pe', '--cap-op', '--cap-pe'].forEach((prop) =>
-        card.style.removeProperty(prop)
-      );
-      card.classList.remove('is-center');
-    });
-  };
-
-  const sync = () => {
-    if (mq.matches) {
-      stage.classList.add('is-interactive');
-      stage.tabIndex = 0;
-      applyPositions();
-    } else {
-      stage.classList.remove('is-interactive');
-      stage.removeAttribute('tabindex');
-      clearInline();
-    }
-    if (prevBtn) prevBtn.style.display = mq.matches ? 'inline-flex' : 'none';
-    if (nextBtn) nextBtn.style.display = mq.matches ? 'inline-flex' : 'none';
-    if (dotsWrap) dotsWrap.style.display = mq.matches ? 'flex' : 'none';
-  };
-
   prevBtn?.addEventListener('click', () => goTo(current - 1));
   nextBtn?.addEventListener('click', () => goTo(current + 1));
 
@@ -1068,7 +1060,7 @@ function initCasesCarousel() {
   stage.addEventListener(
     'wheel',
     (event) => {
-      if (!mq.matches) return;
+      if (!hoverMq.matches) return;
       if (Math.abs(event.deltaY) < 4 && Math.abs(event.deltaX) < 4) return;
       event.preventDefault();
       if (wheelLock) return;
@@ -1083,7 +1075,6 @@ function initCasesCarousel() {
   );
 
   stage.addEventListener('keydown', (event) => {
-    if (!mq.matches) return;
     if (event.key === 'ArrowRight') {
       event.preventDefault();
       goTo(current + 1);
@@ -1093,15 +1084,32 @@ function initCasesCarousel() {
     }
   });
 
+  stage.addEventListener(
+    'touchstart',
+    (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+    },
+    { passive: true }
+  );
+  stage.addEventListener(
+    'touchend',
+    (event) => {
+      const diff = touchStartX - event.changedTouches[0].screenX;
+      if (Math.abs(diff) < 40) return;
+      goTo(current + (diff > 0 ? 1 : -1));
+    },
+    { passive: true }
+  );
+
   cards.forEach((card, i) => {
-    // Capture phase: on desktop, a click anywhere on a non-center card
-    // (including its play button) re-centers it instead of opening the
-    // video straight away. Runs before .iphone-watch-btn/.iphone-play-overlay's
-    // own bubble-phase listeners, which is why it must stop propagation here.
+    // Capture phase: a tap/click anywhere on a non-center card (including
+    // its play button) re-centers it instead of opening the video straight
+    // away. Runs before .iphone-watch-btn/.iphone-play-overlay's own
+    // bubble-phase listeners, which is why it must stop propagation here.
     card.addEventListener(
       'click',
       (event) => {
-        if (!mq.matches || i === current) return;
+        if (i === current) return;
         event.stopPropagation();
         event.preventDefault();
         goTo(i);
@@ -1110,14 +1118,21 @@ function initCasesCarousel() {
     );
 
     card.addEventListener('click', (event) => {
-      if (mq.matches && i !== current) return;
+      if (i !== current) return;
       if (event.target.closest('.iphone-watch-btn') || event.target.closest('.iphone-play-overlay')) return;
       card.querySelector('.iphone-watch-btn')?.click();
     });
   });
 
-  mq.addEventListener('change', sync);
-  sync();
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(applyPositions, 150);
+  });
+
+  stage.classList.add('is-interactive');
+  stage.tabIndex = 0;
+  applyPositions();
 }
 
 /* ============================================

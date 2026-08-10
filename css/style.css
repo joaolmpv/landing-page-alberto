@@ -34,6 +34,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -2157,6 +2158,31 @@ img {
   .hero-badge {
     display: none;
   }
+
+  /* A foto some em telas estreitas porque flex:1 dentro de um flex-column
+     de altura automática colapsa .hero-visual (flex-basis:0% sem espaço
+     livre pra crescer). Em vez de disputar espaço com o texto no fluxo,
+     ela vira uma camada posicionada atrás do texto, à direita. */
+  .hero-inner {
+    display: block;
+    position: relative;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-visual {
+    position: absolute;
+    top: -0.5rem;
+    right: -8%;
+    width: 62%;
+    max-width: 260px;
+    margin: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
 }
 
 /* Desktop */
@@ -2192,7 +2218,9 @@ img {
 }
 
 .iphone-carousel-btn {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   width: 44px;
   height: 44px;
@@ -2212,7 +2240,7 @@ img {
 }
 
 .iphone-carousel-dots {
-  display: none;
+  display: flex;
   justify-content: center;
   gap: 0.75rem;
   margin-top: 1.5rem;
@@ -2262,9 +2290,11 @@ img {
   cursor: pointer;
 }
 
-/* Desktop: JS (initCasesCarousel) toggles .is-interactive and drives
-   --tx/--rot/--sc/--op/--z/--pe/--cap-op per card to build a 3D
-   coverflow ("roleta") controlled by mouse wheel, arrows and dots. */
+/* JS (initCasesCarousel) always adds .is-interactive on load and drives
+   --tx/--rot/--sc/--op/--z/--pe/--cap-op per card to build a 3D coverflow
+   ("roleta") — controlled by mouse wheel on desktop, and by arrows, dots,
+   swipe or tapping a side card on any screen size. Without JS the cards
+   fall back to the plain stacked list below. */
 .iphone-stage.is-interactive {
   position: relative;
   display: block;
@@ -2279,11 +2309,10 @@ img {
   position: absolute;
   top: 0;
   left: 50%;
-  margin-left: -110px;
   opacity: var(--op, 1);
   z-index: var(--z, 1);
   pointer-events: var(--pe, auto);
-  transform: translateX(var(--tx, 0px)) rotateY(var(--rot, 0deg)) scale(var(--sc, 1));
+  transform: translateX(-50%) translateX(var(--tx, 0px)) rotateY(var(--rot, 0deg)) scale(var(--sc, 1));
   transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
 }
 
@@ -2533,6 +2562,47 @@ img {
 
   .vmodal-container {
     width: 280px;
+  }
+
+  .iphone-stage.is-interactive {
+    height: 700px;
+  }
+
+  .iphone-carousel {
+    gap: 0.25rem;
+  }
+
+  .iphone-carousel-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.05rem;
+  }
+
+  /* Padding/fonte de desktop deixavam o card de depoimento estreito e
+     comprido em telas pequenas; reduz para manter proporção de retângulo. */
+  .testimonial-card {
+    padding: 1.75rem 1.5rem;
+  }
+
+  .quote-mark {
+    font-size: 4.5rem;
+    top: 0.25rem;
+    left: 1rem;
+  }
+
+  .testimonial-text {
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+
+  .carousel-wrap {
+    gap: 0.5rem;
+  }
+
+  .carousel-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.05rem;
   }
 }
 
