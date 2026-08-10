@@ -1473,6 +1473,7 @@ img {
 .testimonials-bg {
   position: absolute;
   inset: 0;
+  background-image: url('../assets/images/fundo-avaliacoes.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1530,6 +1531,17 @@ img {
   margin: 0 auto;
 }
 
+.testimonial-source {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.75rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
 .quote-mark {
   position: absolute;
   top: 0.5rem;
@@ -1579,11 +1591,17 @@ img {
   flex-shrink: 0;
 }
 
+.author-info {
+  min-width: 0;
+}
+
 .author-name {
   display: block;
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--sand);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .author-dx {
@@ -2603,6 +2621,10 @@ img {
     width: 36px;
     height: 36px;
     font-size: 1.05rem;
+  }
+
+  .testimonials-bg {
+    background-image: url('../assets/images/fundo-avaliacoes-mobile.webp');
   }
 }
 
