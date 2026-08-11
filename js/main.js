@@ -218,11 +218,11 @@ async function initPreloader() {
 }
 
 function initPageEffects() {
-  initAbout();
-  initCards();
-  initMedia();
-  initCTA();
-  initCredentials();
+  safeInit('initAbout', initAbout);
+  safeInit('initCards', initCards);
+  safeInit('initMedia', initMedia);
+  safeInit('initCTA', initCTA);
+  safeInit('initCredentials', initCredentials);
 }
 
 /* ============================================
@@ -245,9 +245,15 @@ function initNavbar() {
     }
   });
 
+  const hasGsap = typeof gsap !== 'undefined';
+
   const openDrawer = () => {
     if (!drawer) return;
-    gsap.to(drawer, { x: 0, duration: 0.4, ease: 'power3.out' });
+    if (hasGsap) {
+      gsap.to(drawer, { x: 0, duration: 0.4, ease: 'power3.out' });
+    } else {
+      drawer.style.transform = 'translateX(0)';
+    }
     overlay?.classList.add('active');
     menuToggle?.setAttribute('aria-expanded', 'true');
     drawer.setAttribute('aria-hidden', 'false');
@@ -255,7 +261,11 @@ function initNavbar() {
 
   const closeDrawer = () => {
     if (!drawer) return;
-    gsap.to(drawer, { x: '100%', duration: 0.4, ease: 'power3.in' });
+    if (hasGsap) {
+      gsap.to(drawer, { x: '100%', duration: 0.4, ease: 'power3.in' });
+    } else {
+      drawer.style.transform = 'translateX(100%)';
+    }
     overlay?.classList.remove('active');
     menuToggle?.setAttribute('aria-expanded', 'false');
     drawer.setAttribute('aria-hidden', 'true');
@@ -269,7 +279,13 @@ function initNavbar() {
     link.addEventListener('click', closeDrawer);
   });
 
-  gsap.set(drawer, { x: '100%' });
+  if (drawer) {
+    if (hasGsap) {
+      gsap.set(drawer, { x: '100%' });
+    } else {
+      drawer.style.transform = 'translateX(100%)';
+    }
+  }
 }
 
 /* ============================================
@@ -994,12 +1010,16 @@ function initCasesCarousel() {
   };
   const FAR_DESKTOP = { tx: 420, rot: 36, sc: 0.5, op: 0, z: 0 };
 
+  // Espaçamento maior que no desktop (proporcionalmente à largura do
+  // cartão) para reduzir a sobreposição entre cartões vizinhos — em telas
+  // de toque, um alvo de toque parcialmente coberto pelo cartão da frente
+  // é fácil de errar.
   const STEPS_MOBILE = {
     0: { tx: 0, rot: 0, sc: 1, op: 1, z: 5 },
-    1: { tx: 128, rot: 24, sc: 0.72, op: 0.55, z: 3 },
-    2: { tx: 210, rot: 34, sc: 0.54, op: 0.24, z: 1 },
+    1: { tx: 150, rot: 24, sc: 0.72, op: 0.55, z: 3 },
+    2: { tx: 240, rot: 34, sc: 0.54, op: 0.24, z: 1 },
   };
-  const FAR_MOBILE = { tx: 260, rot: 38, sc: 0.42, op: 0, z: 0 };
+  const FAR_MOBILE = { tx: 290, rot: 38, sc: 0.42, op: 0, z: 0 };
 
   const hoverMq = window.matchMedia('(hover: hover) and (pointer: fine)');
   let current = Math.floor(total / 2);
@@ -1124,10 +1144,20 @@ function initCasesCarousel() {
     });
   });
 
+  // iOS dispara 'resize' repetidamente durante o scroll (a barra de
+  // endereço recolhe/expande), sem a largura mudar de fato — recalcular
+  // a posição de 5 cartões a cada disparo é trabalho de graça. Só refaz
+  // as posições quando o breakpoint mobile/desktop realmente muda.
   let resizeTimer;
+  let wasMobile = isMobile();
   window.addEventListener('resize', () => {
     window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(applyPositions, 150);
+    resizeTimer = window.setTimeout(() => {
+      const nowMobile = isMobile();
+      if (nowMobile === wasMobile) return;
+      wasMobile = nowMobile;
+      applyPositions();
+    }, 150);
   });
 
   stage.classList.add('is-interactive');
@@ -1138,6 +1168,18 @@ function initCasesCarousel() {
 /* ============================================
    DOM Ready
    ============================================ */
+/* Uma função de init que falhar (ex.: GSAP bloqueado por extensão/adblock,
+   CDN indisponível numa rede móvel instável) não pode travar as próximas —
+   sem isso, um único throw síncrono aqui dentro impede o resto do array de
+   rodar, incluindo o preloader e as animações de entrada. */
+function safeInit(name, fn) {
+  try {
+    fn();
+  } catch (err) {
+    console.error(`[init] ${name} falhou:`, err);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   window.scrollTo(0, 0);
 
@@ -1148,14 +1190,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  initNavbar();
-  initCases();
-  initCarousel();
-  initAboutCarousel();
-  initIphoneModal();
-  initCasesCarousel();
-  initBookingForm();
-  initStickyWhatsApp();
+  safeInit('initNavbar', initNavbar);
+  safeInit('initCases', initCases);
+  safeInit('initCarousel', initCarousel);
+  safeInit('initAboutCarousel', initAboutCarousel);
+  safeInit('initIphoneModal', initIphoneModal);
+  safeInit('initCasesCarousel', initCasesCarousel);
+  safeInit('initBookingForm', initBookingForm);
+  safeInit('initStickyWhatsApp', initStickyWhatsApp);
 
   if (reduced) {
     const preloader = document.getElementById('preloader');
@@ -1166,12 +1208,21 @@ document.addEventListener('DOMContentLoaded', async () => {
       mountStaticLogo(svg, document.getElementById('nav-logo-slot'), NAV_LOGO_PX);
       mountStaticLogo(svg, document.getElementById('footer-logo-slot'), FOOTER_LOGO_PX);
     });
-    initReducedMotion();
+    safeInit('initReducedMotion', initReducedMotion);
     return;
   }
 
-  await initPreloader();
+  try {
+    await initPreloader();
+  } catch (err) {
+    console.error('[init] initPreloader falhou:', err);
+    const preloader = document.getElementById('preloader');
+    if (preloader) preloader.style.display = 'none';
+    document.body.classList.remove('preloader-active');
+    document.body.classList.add('page-revealed', 'page-ready');
+    safeInit('initHeroAnimations', initHeroAnimations);
+  }
   window.scrollTo(0, 0);
-  initPageEffects();
-  initReducedMotion();
+  safeInit('initPageEffects', initPageEffects);
+  safeInit('initReducedMotion', initReducedMotion);
 });

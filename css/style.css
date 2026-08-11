@@ -2586,6 +2586,15 @@ img {
   .iphone-wrap {
     width: 200px;
     height: 410px;
+    /* Sombra dupla e cara em GPU; com 5 cartões simultâneos em 3D no
+       celular (eram 3 antes) isso pesava bastante no scroll. Uma sombra
+       única e mais barata no card central, nenhuma nos laterais
+       (já discretos por opacidade/escala). */
+    filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.35));
+  }
+
+  .iphone-stage.is-interactive .iphone-card:not(.is-center) .iphone-wrap {
+    filter: none;
   }
 
   .vmodal-container {
