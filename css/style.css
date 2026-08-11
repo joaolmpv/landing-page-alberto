@@ -826,6 +826,12 @@ img {
   transform: translate3d(50px, 58px, -112px) rotateZ(4.6deg) scale(0.94);
 }
 
+.about-carousel-slide[data-depth='5'] {
+  z-index: 0;
+  opacity: 1;
+  transform: translate3d(62px, 72px, -140px) rotateZ(5.2deg) scale(0.925);
+}
+
 /* Top page peels away ABOVE the next photo (never overlays it after) */
 .about-carousel-slide.is-turning-out {
   z-index: 10 !important;
@@ -973,6 +979,10 @@ img {
 
   .about-carousel-slide[data-depth='4'] {
     transform: translate3d(34px, 42px, -80px) rotateZ(3.4deg) scale(0.952);
+  }
+
+  .about-carousel-slide[data-depth='5'] {
+    transform: translate3d(42px, 52px, -100px) rotateZ(4deg) scale(0.94);
   }
 }
 
