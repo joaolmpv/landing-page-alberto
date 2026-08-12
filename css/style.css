@@ -761,9 +761,19 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 18%;
+  object-position: center 20%;
   pointer-events: none;
   user-select: none;
+}
+
+/* atendimento-6.webp (data-index 5) é a foto em frente ao Hospital
+   Einstein: o letreiro/marquise ocupa o topo do enquadramento e o Dr.
+   Alberto fica pequeno, mais abaixo no centro da imagem — precisa de um
+   object-position bem mais alto que as demais fotos para puxar o rosto
+   dele para dentro do recorte, mantendo o letreiro do hospital visível
+   acima. */
+.about-carousel-slide[data-index="5"] img {
+  object-position: center 35%;
 }
 
 /* Paper backs for pages behind the cover photo */
@@ -2780,6 +2790,10 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.hero-flip-back img {
+  object-position: center 15%;
 }
 
 .hero-flip-back-overlay {
