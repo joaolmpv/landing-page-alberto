@@ -2,6 +2,10 @@ if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+if (typeof gsap !== 'undefined' && typeof ScrollToPlugin !== 'undefined') {
+  gsap.registerPlugin(ScrollToPlugin);
+}
+
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
@@ -349,6 +353,73 @@ function initHeroAnimations() {
       onComplete: () => badges[1].classList.add('is-floating'),
     });
   }
+
+  // Parallax do texto do hero: sobe e esmaece levemente enquanto o usuário
+  // rola para além da seção.
+  const heroContent = document.querySelector('.hero-content');
+  if (heroContent) {
+    gsap.to(heroContent, {
+      yPercent: -8,
+      opacity: 0.6,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
+  }
+  // Nota: parallax nos .hero-badge foi propositalmente omitido — eles usam
+  // animation:floatBadge em CSS (ver comentário acima sobre .is-floating),
+  // que tem prioridade sobre qualquer transform inline do GSAP enquanto
+  // está rodando. Um scrub de scroll nas mesmas propriedades seria
+  // constantemente sobrescrito pelo floatBadge e não teria efeito visual.
+}
+
+/* ============================================
+   initHeroFlip
+   ============================================ */
+function initHeroFlip() {
+  const container = document.querySelector('.hero-flip-container');
+  const card = document.querySelector('.hero-flip-card');
+  const hint = document.querySelector('.flip-hint');
+  if (!container || !card) return;
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const duration = reduced ? 0.01 : 0.7;
+  const isTouch = window.matchMedia('(hover: none)').matches;
+  let flipped = false;
+  let hintDismissed = false;
+
+  const dismissHint = () => {
+    if (hintDismissed || !hint) return;
+    hintDismissed = true;
+    gsap.to(hint, { opacity: 0, duration: 0.3 });
+  };
+
+  const setFlipped = (state) => {
+    flipped = state;
+    card.classList.toggle('is-flipped', flipped);
+    gsap.to(card, { rotationY: flipped ? 180 : 0, duration, ease: 'power3.inOut' });
+  };
+
+  if (isTouch) {
+    container.addEventListener(
+      'touchstart',
+      () => {
+        dismissHint();
+        setFlipped(!flipped);
+      },
+      { passive: true }
+    );
+  } else {
+    container.addEventListener('mouseenter', () => {
+      dismissHint();
+      setFlipped(true);
+    });
+    container.addEventListener('mouseleave', () => setFlipped(false));
+  }
 }
 
 /* ============================================
@@ -371,6 +442,30 @@ function initCredentials() {
     duration: 0.7,
     ease: 'power2.out',
   });
+
+  // As 4 credenciais (UEPA, Einstein, FIFA, CREFITO) são todas texto, sem
+  // nenhum valor numérico real disponível para animar como contador — em
+  // vez de inventar estatísticas, aplica-se um blur-in a todas.
+  const values = document.querySelectorAll('.credential-value');
+  if (values.length) {
+    gsap.set(values, { filter: 'blur(8px)', opacity: 0 });
+    ScrollTrigger.create({
+      trigger: '#credenciais',
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        values.forEach((value, index) => {
+          gsap.to(value, {
+            filter: 'blur(0px)',
+            opacity: 1,
+            duration: 0.8,
+            delay: index * 0.15,
+            ease: 'power2.out',
+          });
+        });
+      },
+    });
+  }
 }
 
 /* ============================================
@@ -384,9 +479,11 @@ function initAbout() {
   if (parallaxGroup) {
     gsap.fromTo(
       parallaxGroup,
-      { y: -36 },
+      { y: -54, rotation: 0, scale: 1 },
       {
-        y: 48,
+        y: 72,
+        rotation: -2,
+        scale: 1.06,
         ease: 'none',
         scrollTrigger: {
           trigger: '#sobre',
@@ -525,6 +622,8 @@ function initCards() {
   const cards = document.querySelectorAll('.expertise-card');
   if (!cards.length) return;
 
+  // Cards 1/3 (índices 0/2) entram com rotation -3→0; cards 2/4 (índices
+  // 1/3) com rotation 3→0 — leve efeito de "leque" na entrada.
   gsap.from(cards, {
     scrollTrigger: {
       trigger: '#cards-grid',
@@ -533,13 +632,28 @@ function initCards() {
       once: true,
     },
     opacity: 0,
-    y: 50,
-    stagger: 0.15,
+    y: 60,
+    rotation: (index) => (index % 2 === 0 ? -3 : 3),
+    stagger: 0.12,
     duration: 0.8,
-    ease: 'power3.out',
+    ease: 'back.out(1.4)',
     // clearProps evita que o transform inline do GSAP fique "preso" no
     // elemento e bloqueie o transform do :hover definido em CSS.
     clearProps: 'transform',
+  });
+
+  cards.forEach((card) => {
+    const icon = card.querySelector('.card-icon');
+    const title = card.querySelector('.card-title');
+
+    card.addEventListener('mouseenter', () => {
+      if (icon) gsap.to(icon, { scale: 1.2, rotation: 5, duration: 0.4, ease: 'back.out(1.7)' });
+      if (title) gsap.to(title, { x: 4, duration: 0.3 });
+    });
+    card.addEventListener('mouseleave', () => {
+      if (icon) gsap.to(icon, { scale: 1, rotation: 0, duration: 0.4, ease: 'back.out(1.7)' });
+      if (title) gsap.to(title, { x: 0, duration: 0.3 });
+    });
   });
 }
 
@@ -1166,6 +1280,197 @@ function initCasesCarousel() {
 }
 
 /* ============================================
+   initMagneticButtons
+   ============================================ */
+function initMagneticButtons() {
+  if (window.matchMedia('(hover: none)').matches) return;
+
+  const buttons = document.querySelectorAll('.btn, .btn-primary, .btn-secondary, .btn-nav-cta, .iphone-watch-btn');
+  const RADIUS = 80;
+  const STRENGTH = 0.3;
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('mousemove', (event) => {
+      const rect = btn.getBoundingClientRect();
+      const dx = event.clientX - (rect.left + rect.width / 2);
+      const dy = event.clientY - (rect.top + rect.height / 2);
+      if (Math.hypot(dx, dy) < RADIUS) {
+        gsap.to(btn, { x: dx * STRENGTH, y: dy * STRENGTH, duration: 0.3, ease: 'power2.out' });
+      }
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
+    });
+  });
+}
+
+/* ============================================
+   initCustomCursor
+   ============================================ */
+function initCustomCursor() {
+  if ('ontouchstart' in window) return;
+
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  if (!dot || !ring) return;
+
+  document.addEventListener('mousemove', (event) => {
+    gsap.set(dot, { x: event.clientX, y: event.clientY, xPercent: -50, yPercent: -50 });
+    gsap.to(ring, {
+      x: event.clientX,
+      y: event.clientY,
+      xPercent: -50,
+      yPercent: -50,
+      duration: 0.12,
+      ease: 'power2.out',
+    });
+  });
+
+  document.querySelectorAll('a, button, .iphone-card, .video-case-card, .expertise-card').forEach((el) => {
+    el.addEventListener('mouseenter', () => {
+      gsap.to(dot, { scale: 0, opacity: 0, duration: 0.2 });
+      gsap.to(ring, { width: 52, height: 52, borderColor: 'rgba(161,136,127,0.9)', duration: 0.3 });
+    });
+    el.addEventListener('mouseleave', () => {
+      gsap.to(dot, { scale: 1, opacity: 1, duration: 0.2 });
+      gsap.to(ring, { width: 32, height: 32, borderColor: 'rgba(161,136,127,0.5)', duration: 0.3 });
+    });
+  });
+
+  document.addEventListener('mousedown', () => {
+    gsap.to(ring, { scale: 0.8, duration: 0.1 });
+  });
+  document.addEventListener('mouseup', () => {
+    gsap.to(ring, { scale: 1, duration: 0.2 });
+  });
+}
+
+/* ============================================
+   initSmoothNavLinks
+   ============================================ */
+function initSmoothNavLinks() {
+  const links = document.querySelectorAll('a[href^="#"]');
+  if (!links.length) return;
+
+  // html tem scroll-behavior:smooth no CSS (para navegação nativa sem JS).
+  // Isso compete com o ScrollToPlugin do GSAP — o navegador tenta suavizar
+  // a MESMA mudança de scrollTop que o GSAP já está animando, e o destino
+  // final acaba errado. Como a partir daqui todo scroll por âncora passa
+  // pelo GSAP, desliga-se o smooth nativo para não haver duas animações
+  // de scroll disputando a mesma propriedade.
+  document.documentElement.style.scrollBehavior = 'auto';
+
+  const navbar = document.getElementById('navbar');
+  const drawer = document.getElementById('mobile-drawer');
+  const overlay = document.getElementById('drawer-overlay');
+  const menuToggle = document.getElementById('menu-toggle');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasScrollTo = typeof ScrollToPlugin !== 'undefined';
+
+  links.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const href = link.getAttribute('href');
+      if (!href || href.length < 2) return;
+      const target = document.querySelector(href);
+      if (!target) return;
+
+      event.preventDefault();
+      const navHeight = navbar ? navbar.getBoundingClientRect().height : 80;
+      const targetY = target.getBoundingClientRect().top + window.scrollY - navHeight;
+
+      if (!reduced && hasScrollTo) {
+        gsap.to(window, { scrollTo: { y: targetY }, duration: 1.2, ease: 'power3.inOut' });
+      } else {
+        window.scrollTo({ top: targetY, behavior: reduced ? 'auto' : 'smooth' });
+      }
+
+      if (drawer && link.closest('#mobile-drawer')) {
+        gsap.to(drawer, {
+          x: '100%',
+          opacity: 0,
+          duration: 0.4,
+          ease: 'power3.in',
+          onComplete: () => gsap.set(drawer, { clearProps: 'opacity' }),
+        });
+        overlay?.classList.remove('active');
+        menuToggle?.setAttribute('aria-expanded', 'false');
+        drawer.setAttribute('aria-hidden', 'true');
+      }
+    });
+  });
+}
+
+/* ============================================
+   initCarouselArrowsAndSwipeHints
+   Entrada suave das setas premium (depoimentos + casos), micro-feedback de
+   clique e o hint de swipe que some após a primeira interação de cada
+   carrossel.
+   ============================================ */
+function initCarouselArrowsAndSwipeHints() {
+  const groups = [
+    { wrap: '.carousel-wrap', btns: '.carousel-btn' },
+    { wrap: '.iphone-carousel', btns: '.iphone-carousel-btn' },
+  ];
+
+  groups.forEach(({ wrap, btns }) => {
+    const wrapEl = document.querySelector(wrap);
+    if (!wrapEl) return;
+
+    const prevBtn = wrapEl.querySelector('[class*="-prev"]');
+    const nextBtn = wrapEl.querySelector('[class*="-next"]');
+    const hint = wrapEl.querySelector('.swipe-hint');
+    const buttons = wrapEl.querySelectorAll(btns);
+
+    // yPercent:-50 replica o translateY(-50%) do CSS — uma vez que o GSAP
+    // escreve no atributo transform inline, o valor de CSS deixa de ter
+    // efeito, então precisa ser recriado aqui para os botões continuarem
+    // centralizados verticalmente.
+    gsap.set(buttons, { opacity: 0, yPercent: -50 });
+    if (prevBtn) gsap.set(prevBtn, { x: -20 });
+    if (nextBtn) gsap.set(nextBtn, { x: 20 });
+    gsap.to(buttons, { opacity: 1, x: 0, duration: 0.6, delay: 1.2, ease: 'power2.out' });
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('mouseenter', () => {
+        gsap.to(btn, { scale: 1.08, duration: 0.3, ease: 'power2.out' });
+      });
+      btn.addEventListener('mouseleave', () => {
+        gsap.to(btn, { scale: 1, duration: 0.3, ease: 'power2.out' });
+      });
+      btn.addEventListener('click', () => {
+        gsap.to(btn, {
+          scale: 0.85,
+          duration: 0.1,
+          onComplete: () => gsap.to(btn, { scale: 1, duration: 0.2, ease: 'elastic.out(1, 0.5)' }),
+        });
+      });
+    });
+
+    if (hint) {
+      gsap.set(hint, { opacity: 0 });
+      gsap.to(hint, { opacity: 1, duration: 0.5, delay: 1.5 });
+
+      let dismissed = false;
+      const dismissHint = () => {
+        if (dismissed) return;
+        dismissed = true;
+        gsap.to(hint, {
+          opacity: 0,
+          duration: 0.4,
+          onComplete: () => {
+            hint.style.display = 'none';
+          },
+        });
+      };
+
+      wrapEl.addEventListener('touchstart', dismissHint, { passive: true, once: true });
+      buttons.forEach((btn) => btn.addEventListener('click', dismissHint, { once: true }));
+    }
+  });
+}
+
+/* ============================================
    DOM Ready
    ============================================ */
 /* Uma função de init que falhar (ex.: GSAP bloqueado por extensão/adblock,
@@ -1198,6 +1503,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   safeInit('initCasesCarousel', initCasesCarousel);
   safeInit('initBookingForm', initBookingForm);
   safeInit('initStickyWhatsApp', initStickyWhatsApp);
+  safeInit('initHeroFlip', initHeroFlip);
+  safeInit('initMagneticButtons', initMagneticButtons);
+  safeInit('initCustomCursor', initCustomCursor);
+  safeInit('initSmoothNavLinks', initSmoothNavLinks);
+  safeInit('initCarouselArrowsAndSwipeHints', initCarouselArrowsAndSwipeHints);
 
   if (reduced) {
     const preloader = document.getElementById('preloader');

@@ -1026,6 +1026,8 @@ img {
 }
 
 .authority-badge-einstein {
+  position: relative;
+  overflow: hidden;
   background: var(--white);
   border: none;
   border-left: 3px solid var(--gold);
@@ -1037,6 +1039,25 @@ img {
   margin-top: 1rem;
   box-shadow: 0 4px 20px rgba(201, 168, 76, 0.12);
   flex-direction: row;
+}
+
+.authority-badge-einstein::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: skewX(-20deg);
+  animation: shimmerPass 3s ease-in-out infinite;
+  animation-delay: 2s;
+  pointer-events: none;
+}
+
+@keyframes shimmerPass {
+  0% { left: -100%; }
+  100% { left: 150%; }
 }
 
 .authority-badge-einstein img {
@@ -1510,6 +1531,7 @@ img {
 }
 
 .carousel-wrap {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -1619,23 +1641,51 @@ img {
   color: var(--clay);
 }
 
+/* transform/opacity aqui são só o estado inicial antes do JS carregar —
+   initCarouselArrowsAndSwipeHints (main.js) assume o controle via GSAP
+   (yPercent:-50 replica o translateY(-50%)) para animar a entrada e o
+   hover/click sem os dois disputarem a propriedade transform. */
 .carousel-btn {
   flex-shrink: 0;
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
+  background: rgba(10, 25, 47, 0.7);
   border: 1px solid rgba(161, 136, 127, 0.3);
-  background: transparent;
-  color: var(--clay-light);
-  font-size: 1.25rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  transition: background 0.3s ease, border-color 0.3s ease;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  opacity: 0;
+}
+
+.carousel-prev {
+  left: -26px;
+}
+
+.carousel-next {
+  right: -26px;
 }
 
 .carousel-btn:hover {
-  background: var(--clay-deep);
-  color: var(--white);
-  border-color: var(--clay-deep);
+  background: rgba(161, 136, 127, 0.15);
+  border-color: rgba(161, 136, 127, 0.7);
+}
+
+@media (max-width: 640px) {
+  .carousel-prev {
+    left: -6px;
+  }
+
+  .carousel-next {
+    right: -6px;
+  }
 }
 
 .carousel-dots {
@@ -2239,6 +2289,7 @@ img {
    iPhone Cases Stage + Video Modal
    ============================================ */
 .iphone-carousel {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2246,25 +2297,36 @@ img {
 }
 
 .iphone-carousel-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  border: 1px solid rgba(161, 136, 127, 0.35);
-  background: transparent;
-  color: var(--clay-deep);
-  font-size: 1.25rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  background: rgba(10, 25, 47, 0.7);
+  border: 1px solid rgba(161, 136, 127, 0.3);
+  backdrop-filter: blur(8px);
+  cursor: none;
+  transition: background 0.3s ease, border-color 0.3s ease;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  opacity: 0;
+}
+
+.iphone-carousel-prev {
+  left: -26px;
+}
+
+.iphone-carousel-next {
+  right: -26px;
 }
 
 .iphone-carousel-btn:hover {
-  background: var(--clay-deep);
-  color: white;
-  border-color: var(--clay-deep);
+  background: rgba(161, 136, 127, 0.15);
+  border-color: rgba(161, 136, 127, 0.7);
 }
 
 .iphone-carousel-dots {
@@ -2610,9 +2672,16 @@ img {
   }
 
   .iphone-carousel-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 1.05rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  .iphone-carousel-prev {
+    left: -6px;
+  }
+
+  .iphone-carousel-next {
+    right: -6px;
   }
 
   /* Padding/fonte de desktop deixavam o card de depoimento estreito e
@@ -2649,9 +2718,8 @@ img {
   }
 
   .carousel-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 1.05rem;
+    width: 40px;
+    height: 40px;
   }
 
   .testimonials-bg {
@@ -2668,4 +2736,168 @@ img {
     transition: none !important;
     animation: none !important;
   }
+}
+
+/* ============================================
+   Hero flip 3D
+   ============================================ */
+.hero-flip-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  perspective: 1000px;
+  border-radius: inherit;
+}
+
+.hero-flip-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: inherit;
+}
+
+.hero-flip-card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.hero-flip-front,
+.hero-flip-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.hero-flip-back {
+  transform: rotateY(180deg);
+}
+
+.hero-flip-front img,
+.hero-flip-back img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-flip-back-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 25, 47, 0.7) 0%, transparent 60%);
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+}
+
+.hero-flip-back-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(245, 240, 232, 0.8);
+}
+
+.flip-hint {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(161, 136, 127, 0.6);
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .flip-hint {
+    display: none;
+  }
+}
+
+/* ============================================
+   Custom cursor
+   ============================================ */
+body {
+  cursor: none;
+}
+
+#cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background: var(--clay);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: background 0.2s ease;
+}
+
+#cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid rgba(161, 136, 127, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+}
+
+@media (hover: none) {
+  body {
+    cursor: auto;
+  }
+
+  #cursor-dot,
+  #cursor-ring {
+    display: none;
+  }
+}
+
+/* ============================================
+   Swipe hint
+   ============================================ */
+.swipe-hint {
+  position: absolute;
+  bottom: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  color: rgba(136, 146, 164, 0.6);
+  opacity: 0;
+  white-space: nowrap;
+}
+
+.swipe-hint span {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(136, 146, 164, 0.6);
+}
+
+.swipe-hint-icon {
+  animation: swipeHint 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes swipeHint {
+  from { transform: translateX(-6px); }
+  to { transform: translateX(6px); }
+}
+
+.iphone-carousel .swipe-hint {
+  bottom: -28px;
 }
