@@ -384,13 +384,15 @@ function initHeroFlip() {
   const container = document.querySelector('.hero-flip-container');
   const card = document.querySelector('.hero-flip-card');
   const hint = document.querySelector('.flip-hint');
+  const tapHint = document.querySelector('.tap-hint-mobile');
   if (!container || !card) return;
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const duration = reduced ? 0.01 : 0.7;
   const isTouch = window.matchMedia('(hover: none)').matches;
-  let flipped = false;
+  let isFlipped = false;
   let hintDismissed = false;
+  let tapHintDismissed = false;
 
   const dismissHint = () => {
     if (hintDismissed || !hint) return;
@@ -398,20 +400,28 @@ function initHeroFlip() {
     gsap.to(hint, { opacity: 0, duration: 0.3 });
   };
 
+  const dismissTapHint = () => {
+    if (tapHintDismissed || !tapHint) return;
+    tapHintDismissed = true;
+    gsap.to(tapHint, { opacity: 0, duration: 0.3 });
+  };
+
   const setFlipped = (state) => {
-    flipped = state;
-    card.classList.toggle('is-flipped', flipped);
-    gsap.to(card, { rotationY: flipped ? 180 : 0, duration, ease: 'power3.inOut' });
+    isFlipped = state;
+    card.classList.toggle('is-flipped', isFlipped);
+    gsap.to(card, { rotationY: isFlipped ? 180 : 0, duration, ease: 'power3.inOut' });
   };
 
   if (isTouch) {
     container.addEventListener(
       'touchstart',
-      () => {
+      (event) => {
+        event.preventDefault();
         dismissHint();
-        setFlipped(!flipped);
+        dismissTapHint();
+        setFlipped(!isFlipped);
       },
-      { passive: true }
+      { passive: false }
     );
   } else {
     container.addEventListener('mouseenter', () => {
@@ -472,7 +482,12 @@ function initCredentials() {
    initAbout
    ============================================ */
 function initAbout() {
-  const parallaxGroup = document.getElementById('about-parallax-group');
+  // O parallax (y/rotation/scale) é só no álbum de fotos — quando estava
+  // no wrapper inteiro (.about-visual), a mesma rotação de scroll também
+  // girava os badges "UEPA"/"Hospital Einstein" abaixo dele, deixando-os
+  // tortos e com o texto borrado (browsers anti-aliasam texto rotacionado).
+  const parallaxGroup = document.getElementById('about-carousel');
+  const badgeRow = document.querySelector('.about-badge-row');
   const timelineLine = document.getElementById('timeline-line');
   const timelinePoints = document.querySelectorAll('.timeline-point');
 
@@ -493,6 +508,22 @@ function initAbout() {
         },
       }
     );
+  }
+
+  if (badgeRow) {
+    gsap.from(badgeRow.children, {
+      opacity: 0,
+      y: 24,
+      stagger: 0.15,
+      duration: 0.7,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: badgeRow,
+        start: 'top 90%',
+        toggleActions: 'play none none none',
+        once: true,
+      },
+    });
   }
 
   if (timelineLine) {
@@ -950,15 +981,24 @@ function initBookingForm() {
 function initStickyWhatsApp() {
   const sticky = document.getElementById('mobile-sticky-cta');
   const ctaSection = document.getElementById('contato');
+  const footer = document.querySelector('.site-footer');
   if (!sticky || !ctaSection || !('IntersectionObserver' in window)) return;
 
+  // O footer vem logo depois de #contato — sem observá-lo também, o
+  // sticky volta a aparecer ao rolar pelo footer (já que #contato deixa
+  // de intersectar), cobrindo o texto de copyright.
+  const targets = [ctaSection, footer].filter(Boolean);
+  const state = new Map(targets.map((el) => [el, false]));
+
   const observer = new IntersectionObserver(
-    ([entry]) => {
-      sticky.classList.toggle('is-hidden', entry.isIntersecting);
+    (entries) => {
+      entries.forEach((entry) => state.set(entry.target, entry.isIntersecting));
+      const anyIntersecting = Array.from(state.values()).some(Boolean);
+      sticky.classList.toggle('is-hidden', anyIntersecting);
     },
     { threshold: 0.15 }
   );
-  observer.observe(ctaSection);
+  targets.forEach((el) => observer.observe(el));
 }
 
 /* ============================================
@@ -1471,6 +1511,38 @@ function initCarouselArrowsAndSwipeHints() {
 }
 
 /* ============================================
+   initLazyImageScrollRefresh
+   Imagens lazy carregando fora de ordem mudam a altura das seções depois
+   que o ScrollTrigger já mediu o layout — sem recalcular, os gatilhos de
+   scroll (parallax, entradas) disparam na posição errada.
+   ============================================ */
+function initLazyImageScrollRefresh() {
+  if (typeof ScrollTrigger === 'undefined') return;
+
+  // Debounced e adiado enquanto há um scroll animado em andamento (ex.: o
+  // gsap.to(window,{scrollTo:...}) do clique num link do menu): chamar
+  // ScrollTrigger.refresh() no meio dessa animação a interrompe (o
+  // refresh mede/reseta a posição de scroll), fazendo o scroll suave
+  // travar antes de chegar na seção — bug real encontrado ao testar.
+  let refreshTimer;
+  const scheduleRefresh = () => {
+    window.clearTimeout(refreshTimer);
+    refreshTimer = window.setTimeout(() => {
+      if (typeof gsap !== 'undefined' && gsap.isTweening(window)) {
+        scheduleRefresh();
+        return;
+      }
+      ScrollTrigger.refresh();
+    }, 250);
+  };
+
+  document.querySelectorAll('img[loading="lazy"]').forEach((img) => {
+    if (img.complete) return;
+    img.addEventListener('load', scheduleRefresh);
+  });
+}
+
+/* ============================================
    DOM Ready
    ============================================ */
 /* Uma função de init que falhar (ex.: GSAP bloqueado por extensão/adblock,
@@ -1505,9 +1577,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   safeInit('initStickyWhatsApp', initStickyWhatsApp);
   safeInit('initHeroFlip', initHeroFlip);
   safeInit('initMagneticButtons', initMagneticButtons);
-  safeInit('initCustomCursor', initCustomCursor);
+  if (window.matchMedia('(hover: hover)').matches) {
+    safeInit('initCustomCursor', initCustomCursor);
+  }
   safeInit('initSmoothNavLinks', initSmoothNavLinks);
   safeInit('initCarouselArrowsAndSwipeHints', initCarouselArrowsAndSwipeHints);
+  safeInit('initLazyImageScrollRefresh', initLazyImageScrollRefresh);
 
   if (reduced) {
     const preloader = document.getElementById('preloader');
