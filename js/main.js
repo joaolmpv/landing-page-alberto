@@ -900,7 +900,7 @@ function initBookingForm() {
   // apenas o fallback por e-mail (mailto).
   const WEBHOOK_URL = '';
   // TODO: substitua pelo e-mail real que deve receber as solicitações.
-  const DEST_EMAIL = 'SEU-EMAIL-AQUI@dominio.com';
+  const DEST_EMAIL = 'albertonavarrofisio@gmail.com';
 
   const buildMailtoLink = (payload) => {
     const subject = encodeURIComponent(`Solicitação de avaliação — ${payload.name}`);
