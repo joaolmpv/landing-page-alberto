@@ -990,34 +990,53 @@ img {
     flex-shrink: 0;
   }
 
+  /* .about-carousel é o wrapper pai imediato do palco (.about-carousel-stage):
+     overflow:hidden garante que nenhuma camada do baralho vaze para fora
+     da coluna no mobile, e o padding nos 3 lados por onde as camadas se
+     deslocam (translate3d positivo em X/Y) cria espaço para elas
+     respirarem sem cortar nas bordas. */
+  .about-carousel {
+    overflow: hidden;
+    padding-top: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 2rem;
+  }
+
   .about-carousel-stage {
-    padding: 0 1.5rem 1.75rem 0;
-    margin-top: 1rem;
-    padding-top: 0.5rem;
+    width: calc(100% - 2rem);
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    overflow: visible;
   }
 
   .about-carousel-deck {
     height: 250px;
   }
 
+  /* Offsets das camadas reduzidos para no máximo 16px no mobile — os
+     valores do desktop (até 62px) e os anteriores do mobile (até 42px)
+     excediam o padding do wrapper pai, vazando para fora da tela à
+     direita e cortando o topo/base do baralho. */
   .about-carousel-slide[data-depth='1'] {
-    transform: translate3d(10px, 12px, -20px) rotateZ(1.2deg) scale(0.988);
+    transform: translate3d(4px, 4px, -20px) rotateZ(1.2deg) scale(0.988);
   }
 
   .about-carousel-slide[data-depth='2'] {
-    transform: translate3d(18px, 22px, -40px) rotateZ(2deg) scale(0.976);
+    transform: translate3d(7px, 7px, -40px) rotateZ(2deg) scale(0.976);
   }
 
   .about-carousel-slide[data-depth='3'] {
-    transform: translate3d(26px, 32px, -60px) rotateZ(2.8deg) scale(0.964);
+    transform: translate3d(10px, 10px, -60px) rotateZ(2.8deg) scale(0.964);
   }
 
   .about-carousel-slide[data-depth='4'] {
-    transform: translate3d(34px, 42px, -80px) rotateZ(3.4deg) scale(0.952);
+    transform: translate3d(13px, 13px, -80px) rotateZ(3.4deg) scale(0.952);
   }
 
   .about-carousel-slide[data-depth='5'] {
-    transform: translate3d(42px, 52px, -100px) rotateZ(4deg) scale(0.94);
+    transform: translate3d(16px, 16px, -100px) rotateZ(4deg) scale(0.94);
   }
 }
 
