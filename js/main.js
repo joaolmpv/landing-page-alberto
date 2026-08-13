@@ -1,5 +1,10 @@
 if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
+  // No mobile, mostrar/esconder a barra de endereço durante o scroll dispara
+  // um "resize" que recalcula os gatilhos com a viewport errada — isso pode
+  // atrasar ou pular a entrada de elementos (ex.: botões da seção de
+  // contato somem até o próximo refresh). ignoreMobileResize evita isso.
+  ScrollTrigger.config({ ignoreMobileResize: true });
 }
 
 if (typeof gsap !== 'undefined' && typeof ScrollToPlugin !== 'undefined') {
@@ -225,7 +230,7 @@ function initPageEffects() {
   safeInit('initAbout', initAbout);
   safeInit('initCards', initCards);
   safeInit('initMedia', initMedia);
-  safeInit('initCTA', initCTA);
+  safeInit('initContactAnimations', initContactAnimations);
   safeInit('initCredentials', initCredentials);
 }
 
@@ -511,15 +516,18 @@ function initAbout() {
   }
 
   if (badgeRow) {
+    // Mesmo gatilho do álbum de fotos (#about-carousel), com um pequeno
+    // delay a mais, pra os badges entrarem logo depois dele em sequência.
     gsap.from(badgeRow.children, {
       opacity: 0,
-      y: 24,
+      y: 30,
       stagger: 0.15,
       duration: 0.7,
-      ease: 'power2.out',
+      delay: 0.3,
+      ease: 'power3.out',
       scrollTrigger: {
-        trigger: badgeRow,
-        start: 'top 90%',
+        trigger: parallaxGroup || badgeRow,
+        start: 'top 85%',
         toggleActions: 'play none none none',
         once: true,
       },
@@ -556,6 +564,98 @@ function initAbout() {
 }
 
 /* ============================================
+   attachDragSwipe
+   Arrastar com 1 dedo já navega os carrosséis; isto adiciona arrastar com
+   2 dedos como gesto alternativo (evita brigar com o scroll vertical da
+   página e serve pra quem arrasta com dois dedos por hábito). O início do
+   gesto de 2 dedos é recapturado no touchstart em que touches.length vira
+   2 (descarta o X do 1º dedo), e o preventDefault no touchmove com 2
+   dedos impede o navegador de interpretar como pinch/zoom nativo.
+   ============================================ */
+function attachDragSwipe(el, { onPrev, onNext, threshold = 40 } = {}) {
+  if (!el) return;
+
+  let mode = null; // 'one' | 'two'
+  let startX = 0;
+  let lastTwoX = 0;
+
+  const avgX = (touches) => (touches[0].screenX + touches[1].screenX) / 2;
+
+  el.addEventListener(
+    'touchstart',
+    (event) => {
+      if (event.touches.length === 2) {
+        mode = 'two';
+        startX = avgX(event.touches);
+        lastTwoX = startX;
+      } else if (event.touches.length === 1) {
+        mode = 'one';
+        startX = event.touches[0].screenX;
+      }
+    },
+    { passive: true }
+  );
+
+  el.addEventListener(
+    'touchmove',
+    (event) => {
+      if (mode === 'two' && event.touches.length === 2) {
+        event.preventDefault();
+        lastTwoX = avgX(event.touches);
+      }
+    },
+    { passive: false }
+  );
+
+  el.addEventListener(
+    'touchend',
+    (event) => {
+      if (mode === 'two') {
+        if (event.touches.length >= 2) return;
+        const diff = startX - lastTwoX;
+        mode = null;
+        if (Math.abs(diff) < threshold) return;
+        if (diff > 0) onNext?.();
+        else onPrev?.();
+        return;
+      }
+      if (mode === 'one') {
+        const diff = startX - event.changedTouches[0].screenX;
+        mode = null;
+        if (Math.abs(diff) < threshold) return;
+        if (diff > 0) onNext?.();
+        else onPrev?.();
+      }
+    },
+    { passive: true }
+  );
+
+  // Arrastar com o mouse (clique e arraste), equivalente ao swipe de 1
+  // dedo — mouseup fica no window (não no el) pra resolver o gesto mesmo
+  // que o cursor saia do elemento antes de soltar o botão.
+  let mouseDown = false;
+  let mouseStartX = 0;
+
+  el.style.cursor = 'grab';
+
+  el.addEventListener('mousedown', (event) => {
+    mouseDown = true;
+    mouseStartX = event.clientX;
+    el.style.cursor = 'grabbing';
+  });
+
+  window.addEventListener('mouseup', (event) => {
+    if (!mouseDown) return;
+    mouseDown = false;
+    el.style.cursor = 'grab';
+    const diff = mouseStartX - event.clientX;
+    if (Math.abs(diff) < threshold) return;
+    if (diff > 0) onNext?.();
+    else onPrev?.();
+  });
+}
+
+/* ============================================
    initAboutCarousel
    ============================================ */
 function initAboutCarousel() {
@@ -570,7 +670,6 @@ function initAboutCarousel() {
   const total = slides.length;
   let current = 0;
   let isAnimating = false;
-  let touchStartX = 0;
 
   const normalize = (index) => ((index % total) + total) % total;
 
@@ -625,23 +724,10 @@ function initAboutCarousel() {
     });
   });
 
-  deck?.addEventListener(
-    'touchstart',
-    (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    },
-    { passive: true }
-  );
-  deck?.addEventListener(
-    'touchend',
-    (e) => {
-      const diff = touchStartX - e.changedTouches[0].screenX;
-      if (Math.abs(diff) < 40) return;
-      if (diff > 0) goTo(current + 1);
-      else goTo(current - 1);
-    },
-    { passive: true }
-  );
+  attachDragSwipe(deck, {
+    onNext: () => goTo(current + 1),
+    onPrev: () => goTo(current - 1),
+  });
 
   updateStack();
 }
@@ -748,8 +834,6 @@ function initCarousel() {
   const slides = track.querySelectorAll('.carousel-slide');
   const total = slides.length;
   let currentSlide = 0;
-  let touchStartX = 0;
-  let touchEndX = 0;
 
   function updateDots(index) {
     dots.forEach((dot, i) => {
@@ -796,43 +880,10 @@ function initCarousel() {
     });
   });
 
-  viewport?.addEventListener(
-    'touchstart',
-    (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    },
-    { passive: true }
-  );
-
-  viewport?.addEventListener(
-    'touchend',
-    (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const diff = touchStartX - touchEndX;
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) nextSlide();
-        else prevSlide();
-      }
-    },
-    { passive: true }
-  );
-
-  let isDragging = false;
-  let dragStartX = 0;
-
-  viewport?.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    dragStartX = e.clientX;
-  });
-
-  window.addEventListener('mouseup', (e) => {
-    if (!isDragging) return;
-    isDragging = false;
-    const diff = dragStartX - e.clientX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) nextSlide();
-      else prevSlide();
-    }
+  attachDragSwipe(viewport, {
+    onNext: nextSlide,
+    onPrev: prevSlide,
+    threshold: 50,
   });
 
   gsap.set(track, { x: '0%' });
@@ -862,26 +913,140 @@ function initMedia() {
 }
 
 /* ============================================
-   initCTA
+   initContactAnimations
+   Coreografia de entrada da seção de contato: partículas de fundo,
+   título com máscara, linha clay, cards de info, formulário e botões,
+   tudo disparado por um único ScrollTrigger/timeline (em vez de um por
+   elemento) para não haver duas animações concorrendo pela mesma
+   propriedade no mesmo elemento. Também cuida das microinterações de
+   foco nos campos e do hover do botão de submit.
    ============================================ */
-function initCTA() {
-  const section = document.querySelector('.cta-inner');
+function initContactAnimations() {
+  const section = document.getElementById('contato');
   if (!section) return;
 
-  const children = section.children;
-  gsap.from(children, {
+  // No mobile a rolagem é mais rápida e a viewport é instável (barra de
+  // endereço), então os deslocamentos/duração ficam menores e os botões
+  // de contato (WhatsApp/Instagram) NUNCA partem de opacity:0 — são o
+  // elemento mais importante da seção e não podem depender do
+  // ScrollTrigger disparar corretamente para ficarem visíveis.
+  const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+  const particles = section.querySelectorAll('.contact-particle');
+  particles.forEach((particle, index) => {
+    gsap.set(particle, { opacity: 0 });
+    gsap.to(particle, {
+      y: isMobile ? -8 - (index % 4) * 3 : -15 - (index % 4) * 5,
+      duration: 3 + (index % 4),
+      delay: index * 0.4,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+    });
+  });
+
+  const titleLines = section.querySelectorAll('.title-reveal');
+  const line = section.querySelector('.section-line-center');
+  const infoCards = section.querySelectorAll('.contact-item, .contact-address-block, .contact-online-block');
+  const formWrap = section.querySelector('.booking-form-wrap');
+  const ctaButtons = section.querySelectorAll('.cta-buttons .btn');
+  const availabilityHint = section.querySelector('.availability-hint');
+
+  const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: '#contato',
-      start: 'top 70%',
-      toggleActions: 'play none none none',
+      trigger: section,
+      start: 'top 75%',
       once: true,
     },
-    opacity: 0,
-    y: 40,
-    stagger: 0.1,
-    duration: 0.8,
-    ease: 'power2.out',
   });
+
+  if (particles.length) {
+    tl.to(particles, {
+      opacity: (i, target) => target.dataset.opacity || 0.1,
+      duration: 1,
+      stagger: 0.05,
+    }, 0);
+  }
+
+  if (titleLines.length) {
+    tl.from(titleLines, {
+      y: '100%',
+      duration: 0.9,
+      ease: 'power4.out',
+      stagger: 0.12,
+    }, 0);
+  }
+
+  if (line) {
+    tl.from(line, {
+      scaleX: 0,
+      transformOrigin: 'left center',
+      duration: 0.8,
+      ease: 'power3.out',
+    }, 0.6);
+  }
+
+  if (infoCards.length) {
+    tl.from(infoCards, {
+      x: isMobile ? -14 : -30,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: 'power2.out',
+    }, 0.4);
+  }
+
+  if (formWrap) {
+    tl.from(formWrap, {
+      x: isMobile ? 0 : 40,
+      y: isMobile ? 20 : 0,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+    }, 0.3);
+  }
+
+  // Os botões de WhatsApp/Instagram ficam sempre visíveis (sem opacity:0
+  // inicial) — só recebem um leve "pop" de escala/elevação quando a
+  // animação dispara, em vez de dependerem dela para aparecer.
+  if (ctaButtons.length) {
+    gsap.set(ctaButtons, { opacity: 1 });
+    tl.from(ctaButtons, {
+      scale: isMobile ? 0.94 : 0.85,
+      y: isMobile ? 10 : 0,
+      duration: 0.5,
+      stagger: 0.15,
+      ease: 'back.out(1.7)',
+    }, 0.5);
+  }
+
+  if (availabilityHint) {
+    tl.from(availabilityHint, {
+      opacity: 0,
+      y: 10,
+      duration: 0.5,
+      ease: 'power2.out',
+    }, 1.2);
+  }
+
+  section.querySelectorAll('.booking-field input, .booking-field select, .booking-field textarea').forEach((field) => {
+    field.addEventListener('focus', () => {
+      gsap.to(field, { boxShadow: '0 0 0 3px rgba(161, 136, 127, 0.15)', duration: 0.25, ease: 'power2.out' });
+    });
+    field.addEventListener('blur', () => {
+      gsap.to(field, { boxShadow: 'none', duration: 0.25 });
+    });
+  });
+
+  const submitBtn = section.querySelector('.booking-submit');
+  if (submitBtn) {
+    submitBtn.addEventListener('mouseenter', () => {
+      gsap.to(submitBtn, { scale: 1.02, duration: 0.2 });
+    });
+    submitBtn.addEventListener('mouseleave', () => {
+      gsap.to(submitBtn, { scale: 1, duration: 0.2 });
+    });
+  }
 }
 
 /* ============================================
@@ -1178,7 +1343,6 @@ function initCasesCarousel() {
   const hoverMq = window.matchMedia('(hover: hover) and (pointer: fine)');
   let current = Math.floor(total / 2);
   let wheelLock = false;
-  let touchStartX = 0;
 
   const isMobile = () => window.innerWidth < 641;
   const getSteps = () => (isMobile() ? STEPS_MOBILE : STEPS_DESKTOP);
@@ -1258,22 +1422,10 @@ function initCasesCarousel() {
     }
   });
 
-  stage.addEventListener(
-    'touchstart',
-    (event) => {
-      touchStartX = event.changedTouches[0].screenX;
-    },
-    { passive: true }
-  );
-  stage.addEventListener(
-    'touchend',
-    (event) => {
-      const diff = touchStartX - event.changedTouches[0].screenX;
-      if (Math.abs(diff) < 40) return;
-      goTo(current + (diff > 0 ? 1 : -1));
-    },
-    { passive: true }
-  );
+  attachDragSwipe(stage, {
+    onNext: () => goTo(current + 1),
+    onPrev: () => goTo(current - 1),
+  });
 
   cards.forEach((card, i) => {
     // Capture phase: a tap/click anywhere on a non-center card (including

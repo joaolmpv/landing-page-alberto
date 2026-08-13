@@ -291,6 +291,8 @@ img {
   justify-content: space-between;
   padding: 1.25rem 2rem;
   transition: background 0.3s ease, backdrop-filter 0.3s ease, border 0.3s ease;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .navbar.scrolled {
@@ -722,6 +724,7 @@ img {
   width: 100%;
   padding: 0 2.25rem 2.5rem 0;
   perspective: 1600px;
+  -webkit-perspective: 1600px;
   perspective-origin: 40% 50%;
 }
 
@@ -730,6 +733,7 @@ img {
   width: 100%;
   height: clamp(280px, 40vw, 400px);
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
 }
 
 .about-carousel-slide {
@@ -754,6 +758,7 @@ img {
     box-shadow 0.45s ease;
   will-change: transform, opacity;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .about-carousel-slide img {
@@ -970,6 +975,29 @@ img {
 }
 
 @media (max-width: 767px) {
+  /* #sobre nunca teve overflow:hidden vertical (então nada corta o
+     baralho por cima dele) — só trava o eixo X, pra nenhuma camada
+     traseira do álbum abrir um scroll horizontal na página inteira. */
+  #sobre {
+    overflow-x: hidden;
+  }
+
+  .about-grid {
+    overflow: visible;
+  }
+
+  /* .about-visual é o wrapper pai imediato de .about-carousel: o padding
+     assimétrico (mais em cima/direita/baixo, onde as camadas traseiras se
+     deslocam; só 8px à esquerda, que não recebe deslocamento) dá respiro
+     pro baralho sem precisar cortar nada com overflow:hidden. */
+  .about-visual {
+    overflow: visible;
+    padding-top: 24px;
+    padding-right: 24px;
+    padding-bottom: 24px;
+    padding-left: 8px;
+  }
+
   /* Os 6 pontinhos do álbum, cada um com alvo de toque de 44px (ver
      comentário em .about-dot), somam ~308px + os dois botões de seta —
      mais do que a largura útil do container mobile, forçando a coluna
@@ -990,13 +1018,14 @@ img {
     flex-shrink: 0;
   }
 
-  /* .about-carousel é o wrapper pai imediato do palco (.about-carousel-stage):
-     overflow:hidden garante que nenhuma camada do baralho vaze para fora
-     da coluna no mobile, e o padding nos 3 lados por onde as camadas se
-     deslocam (translate3d positivo em X/Y) cria espaço para elas
-     respirarem sem cortar nas bordas. */
+  /* overflow:hidden aqui cortava o topo da foto da frente durante o
+     parallax de scroll (#about-carousel sobe até 54px via GSAP em
+     initAbout) e o rabisco das camadas traseiras nas bordas — trocado
+     para visible; quem contém o conjunto agora é o padding do wrapper
+     (.about-visual) e o overflow-x:hidden em #sobre, que barra qualquer
+     vazamento horizontal da página sem cortar nada verticalmente. */
   .about-carousel {
-    overflow: hidden;
+    overflow: visible;
     padding-top: 2rem;
     padding-right: 2rem;
     padding-bottom: 2rem;
@@ -1011,32 +1040,40 @@ img {
     overflow: visible;
   }
 
+  /* Altura responsiva (mesma faixa do desktop, só que menor) em vez de um
+     valor fixo — a imagem principal fica mais completa/alta na tela,
+     dentro de min/max. Continua height:100% no <img> (regra base) em vez
+     de height:auto porque as 6 fotos têm proporções diferentes (a do
+     índice 5 é retrato, as outras paisagem); com height:auto cada slide
+     ficaria de um tamanho, quebrando o empilhamento absoluto por trás da
+     foto da frente. */
   .about-carousel-deck {
-    height: 250px;
+    height: clamp(260px, 68vw, 380px);
   }
 
-  /* Offsets das camadas reduzidos para no máximo 16px no mobile — os
-     valores do desktop (até 62px) e os anteriores do mobile (até 42px)
-     excediam o padding do wrapper pai, vazando para fora da tela à
-     direita e cortando o topo/base do baralho. */
+  /* Deslocamentos a 60% do valor do desktop (rotateZ/translateZ na mesma
+     proporção) — antes eram reduzidos bem mais (até 16px) só porque
+     .about-carousel cortava (overflow:hidden); sem esse corte, dá pra
+     mostrar o baralho quase tão completo quanto no desktop, só mais
+     compacto. */
   .about-carousel-slide[data-depth='1'] {
-    transform: translate3d(4px, 4px, -20px) rotateZ(1.2deg) scale(0.988);
+    transform: translate3d(8px, 10px, -17px) rotateZ(1deg) scale(0.988);
   }
 
   .about-carousel-slide[data-depth='2'] {
-    transform: translate3d(7px, 7px, -40px) rotateZ(2deg) scale(0.976);
+    transform: translate3d(16px, 18px, -34px) rotateZ(1.7deg) scale(0.976);
   }
 
   .about-carousel-slide[data-depth='3'] {
-    transform: translate3d(10px, 10px, -60px) rotateZ(2.8deg) scale(0.964);
+    transform: translate3d(23px, 26px, -50px) rotateZ(2.3deg) scale(0.964);
   }
 
   .about-carousel-slide[data-depth='4'] {
-    transform: translate3d(13px, 13px, -80px) rotateZ(3.4deg) scale(0.952);
+    transform: translate3d(30px, 35px, -67px) rotateZ(2.8deg) scale(0.952);
   }
 
   .about-carousel-slide[data-depth='5'] {
-    transform: translate3d(16px, 16px, -100px) rotateZ(4deg) scale(0.94);
+    transform: translate3d(37px, 43px, -84px) rotateZ(3.1deg) scale(0.94);
   }
 }
 
@@ -1077,6 +1114,25 @@ img {
   display: inline-flex;
   flex-direction: column;
   gap: 0.15rem;
+}
+
+.authority-badge-uepa {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.authority-badge-uepa img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.authority-badge-uepa .badge-small,
+.authority-badge-uepa .badge-main {
+  display: block;
 }
 
 .authority-badge-einstein {
@@ -1270,6 +1326,7 @@ img {
   border-radius: 1.5rem;
   padding: 2.5rem;
   transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  will-change: transform;
 }
 
 .expertise-card::before {
@@ -2039,6 +2096,28 @@ img {
 
 .booking-submit {
   width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.booking-submit::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: skewX(-20deg);
+  animation: submitShimmer 4s ease-in-out infinite;
+  animation-delay: 2s;
+  pointer-events: none;
+}
+
+@keyframes submitShimmer {
+  0% { left: -100%; }
+  30% { left: 150%; }
+  100% { left: 150%; }
 }
 
 @media (min-width: 480px) {
@@ -2066,6 +2145,66 @@ img {
   color: var(--text-muted);
   line-height: 1.5;
   max-width: 480px;
+}
+
+.availability-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: center;
+}
+
+@media (min-width: 1000px) {
+  .availability-hint {
+    justify-content: flex-start;
+  }
+}
+
+.availability-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4CAF50;
+  flex-shrink: 0;
+  animation: availabilityPulse 1.5s ease-in-out infinite;
+}
+
+.availability-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+@keyframes availabilityPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.6; }
+}
+
+/* Contact section — máscara de revelação do título */
+.title-mask {
+  display: block;
+  overflow: hidden;
+}
+
+.title-reveal {
+  display: block;
+}
+
+/* Contact section — partículas decorativas de fundo */
+.contact-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.contact-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--clay);
+  opacity: 0.1;
 }
 
 /* Sticky WhatsApp CTA (mobile) */
@@ -2245,6 +2384,21 @@ img {
     grid-template-columns: 1fr 1fr;
     gap: 5rem;
     align-items: start;
+  }
+
+  /* .about-carousel tem z-index:1 e overflow visível — sem essa folga,
+     as camadas traseiras do baralho (que se deslocam até 72px abaixo da
+     caixa via transform) sobrepõem visualmente os badges UEPA/Einstein
+     logo abaixo. */
+  .about-badge-row {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+  }
+
+  .about-badge-row .authority-badge-small,
+  .about-badge-row .authority-badge-einstein {
+    position: relative;
+    z-index: 2;
   }
 
   .expertise {
@@ -2449,6 +2603,7 @@ img {
   width: 220px;
   flex-shrink: 0;
   cursor: pointer;
+  will-change: transform;
 }
 
 /* JS (initCasesCarousel) always adds .is-interactive on load and drives
@@ -2463,6 +2618,7 @@ img {
   height: 760px;
   padding: 2.5rem 0 0;
   perspective: 1400px;
+  -webkit-perspective: 1400px;
   perspective-origin: 50% 32%;
 }
 
@@ -2492,7 +2648,9 @@ img {
   width: 220px;
   height: 450px;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.5)) drop-shadow(0 8px 20px rgba(0, 0, 0, 0.3));
+  will-change: transform;
 }
 
 .iphone-wrap svg {
@@ -2607,6 +2765,7 @@ img {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.4s ease;
+  will-change: opacity;
 }
 
 .vmodal.is-open {
@@ -2620,6 +2779,8 @@ img {
   background: rgba(4, 10, 20, 0.94);
   backdrop-filter: blur(12px);
   cursor: pointer;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .vmodal-container {
@@ -2630,6 +2791,7 @@ img {
   transform: scale(0.85) translateY(30px);
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.7));
+  will-change: transform;
 }
 
 .vmodal.is-open .vmodal-container {
@@ -2680,6 +2842,8 @@ img {
   cursor: pointer;
   transition: all 0.25s ease;
   backdrop-filter: blur(8px);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .vmodal-close:hover {
@@ -2835,6 +2999,7 @@ img {
   -webkit-transform-style: preserve-3d;
   transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   border-radius: inherit;
+  will-change: transform;
 }
 
 .hero-flip-card.is-flipped {
